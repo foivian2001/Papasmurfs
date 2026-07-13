@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="hero-section d-flex align-items-center">
+        <div class="container text-center">
+            <p class="hero-label">
+                Competitive gaming without the grind
+            </p>
+
+            <h1>
+                Reach the rank you deserve.
+            </h1>
+
+            <p class="hero-text">
+                Choose your game, select your current rank,
+                and tell us where you want to finish.
+                Our experienced boosters handle the climb.
+            </p>
+
+            <a
+                class="btn btn-boost btn-lg"
+                href="{% url 'core:home' %}"
+            >
+                Get Boosted Now
+            </a>
+        </div>
+    </section>
+{% endblock %}

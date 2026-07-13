@@ -1,0 +1,32 @@
+# Python virtual environment
+.venv/
+
+# Python temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local development database
+db.sqlite3
+
+# User-uploaded files
+media/
+
+# Deployment-generated static files
+staticfiles/
+
+# Editor settings
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
