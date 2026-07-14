@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Register | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="account-section">
+        <div class="container">
+            <div class="account-card">
+                <p class="section-label">
+                    Join Papasmurfs
+                </p>
+
+                <h1>Create account</h1>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label
+                                class="form-label"
+                                for="{{ field.id_for_label }}"
+                            >
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.help_text %}
+                                <div class="form-help">
+                                    {{ field.help_text }}
+                                </div>
+                            {% endif %}
+
+                            {% for error in field.errors %}
+                                <p class="form-error">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <button
+                        class="btn btn-boost w-100"
+                        type="submit"
+                    >
+                        Create account
+                    </button>
+                </form>
+
+                <p class="account-alternative">
+                    Already registered?
+
+                    <a href="{% url 'accounts:login' %}">
+                        Login
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

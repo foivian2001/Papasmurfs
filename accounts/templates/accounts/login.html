@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Login | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="account-section">
+        <div class="container">
+            <div class="account-card">
+                <p class="section-label">
+                    Welcome back
+                </p>
+
+                <h1>Login</h1>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {{ form.non_field_errors }}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label
+                                class="form-label"
+                                for="{{ field.id_for_label }}"
+                            >
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% for error in field.errors %}
+                                <p class="form-error">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <button
+                        class="btn btn-boost w-100"
+                        type="submit"
+                    >
+                        Login
+                    </button>
+                </form>
+
+                <p class="account-alternative">
+                    Do not have an account?
+
+                    <a href="{% url 'accounts:register' %}">
+                        Register
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

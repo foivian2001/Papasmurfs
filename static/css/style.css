@@ -294,3 +294,67 @@ body {
         flex-direction: column;
     }
 }
+
+.account-section {
+    min-height: calc(100vh - 70px);
+    padding: 4rem 1rem;
+}
+
+.account-card {
+    width: min(100%, 520px);
+    margin: 0 auto;
+    padding: 2rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+}
+
+.account-card h1 {
+    margin-bottom: 2rem;
+    font-weight: 900;
+}
+
+.account-card input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #354255;
+    border-radius: 0.5rem;
+    background-color: #0b1119;
+    color: #ffffff;
+}
+
+.account-card input:focus {
+    border-color: var(--papasmurfs-cyan);
+    outline: none;
+}
+
+.form-help {
+    margin-top: 0.4rem;
+    color: #9ca9b8;
+    font-size: 0.85rem;
+}
+
+.form-help ul {
+    margin-bottom: 0;
+    padding-left: 1.2rem;
+}
+
+.form-error {
+    margin-top: 0.4rem;
+    color: #ff7b7b;
+}
+
+.account-alternative {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.account-alternative a {
+    color: var(--papasmurfs-cyan);
+}
+
+.nav-button {
+    border: 0;
+    background: transparent;
+}

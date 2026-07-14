@@ -55,24 +55,66 @@
                     id="mainNavigation"
                 >
                     <ul class="navbar-nav ms-auto">
-    <li class="nav-item">
-        <a
-            class="nav-link"
-            href="{% url 'core:home' %}"
-        >
-            Home
-        </a>
-    </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{% url 'core:home' %}"
+                            >
+                                Home
+                            </a>
+                        </li>
 
-    <li class="nav-item">
-        <a
-            class="nav-link"
-            href="{% url 'catalogue:package_list' %}"
-        >
-            Services
-        </a>
-    </li>
-</ul>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{% url 'catalogue:package_list' %}"
+                            >
+                                Services
+                            </a>
+                        </li>
+
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <span class="nav-link">
+                                    Hello, {{ user.username }}
+                                </span>
+                            </li>
+
+                            <li class="nav-item">
+                                <form
+                                    method="post"
+                                    action="{% url 'accounts:logout' %}"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        class="nav-link nav-button"
+                                        type="submit"
+                                    >
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link"
+                                    href="{% url 'accounts:login' %}"
+                                >
+                                    Login
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link"
+                                    href="{% url 'accounts:register' %}"
+                                >
+                                    Register
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
