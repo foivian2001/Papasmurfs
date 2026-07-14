@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete {{ game.name }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="delete-confirmation-card">
+                <p class="section-label">
+                    Confirm deletion
+                </p>
+
+                <h1>Delete {{ game.name }}?</h1>
+
+                <p>
+                    This action will permanently delete the game and
+                    all service categories connected to it.
+                </p>
+
+                <p class="delete-warning">
+                    This action cannot be undone.
+                </p>
+
+                <form
+                    method="post"
+                    action="{% url 'controlpanel:game_delete' game.id %}"
+                >
+                    {% csrf_token %}
+
+                    <div class="form-actions">
+                        <button
+                            class="btn btn-danger"
+                            type="submit"
+                        >
+                            Permanently delete
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'controlpanel:game_list' %}"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -494,3 +494,178 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.management-page-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.management-page-heading h1,
+.management-form-card h1,
+.delete-confirmation-card h1 {
+    font-weight: 900;
+}
+
+.management-page-heading p:last-child {
+    color: #b9c3cf;
+}
+
+.message-container {
+    margin-bottom: 1.5rem;
+}
+
+.site-message {
+    padding: 1rem;
+    border: 1px solid var(--papasmurfs-cyan);
+    border-radius: 0.75rem;
+    background-color: rgba(35, 217, 217, 0.1);
+    color: var(--papasmurfs-cyan);
+}
+
+.management-table-wrapper {
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+}
+
+.management-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    background-color: var(--papasmurfs-panel);
+}
+
+.management-table th,
+.management-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #273241;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.management-table th {
+    background-color: #0b1119;
+    color: var(--papasmurfs-cyan);
+    font-size: 0.85rem;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+}
+
+.management-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.management-table tbody tr:hover {
+    background-color: rgba(35, 217, 217, 0.04);
+}
+
+.management-thumbnail {
+    width: 72px;
+    height: 52px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+}
+
+.no-image {
+    color: #8c98a7;
+    font-size: 0.85rem;
+}
+
+.table-description {
+    max-width: 330px;
+    margin: 0.35rem 0 0;
+    color: #9faab7;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.65rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.status-active {
+    background-color: rgba(46, 204, 113, 0.14);
+    color: #68e49b;
+}
+
+.status-inactive {
+    background-color: rgba(255, 123, 123, 0.14);
+    color: #ff8e8e;
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.empty-table {
+    padding: 3rem !important;
+    color: #aab5c2;
+    text-align: center !important;
+}
+
+.management-form-card,
+.delete-confirmation-card {
+    width: min(100%, 700px);
+    margin: 0 auto;
+    padding: 2rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+}
+
+.management-form-card .form-control {
+    border: 1px solid #354255;
+    background-color: #0b1119;
+    color: #ffffff;
+}
+
+.management-form-card .form-control:focus {
+    border-color: var(--papasmurfs-cyan);
+    background-color: #0b1119;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(35, 217, 217, 0.12);
+}
+
+.management-form-card input[type="file"]::file-selector-button {
+    border: 0;
+    background-color: var(--papasmurfs-purple);
+    color: #ffffff;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.delete-confirmation-card p {
+    color: #b9c3cf;
+}
+
+.delete-warning {
+    color: #ff8e8e !important;
+    font-weight: 800;
+}
+
+@media (max-width: 767px) {
+    .management-page-heading {
+        flex-direction: column;
+    }
+
+    .management-page-heading .btn {
+        width: 100%;
+    }
+
+    .management-form-card,
+    .delete-confirmation-card {
+        padding: 1.5rem;
+    }
+}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Manage Games | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="management-page-heading">
+                <div>
+                    <p class="section-label">
+                        Catalogue administration
+                    </p>
+
+                    <h1>Manage Games</h1>
+
+                    <p>
+                        Add, edit, activate or remove competitive games.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-boost"
+                    href="{% url 'controlpanel:game_create' %}"
+                >
+                    Add new game
+                </a>
+            </div>
+
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="management-table-wrapper">
+                <table class="management-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Game</th>
+                            <th>Status</th>
+                            <th>Categories</th>
+                            <th>Ranks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for game in games %}
+                            <tr>
+                                <td>
+                                    {% if game.image %}
+                                        <img
+                                            class="management-thumbnail"
+                                            src="{{ game.image.url }}"
+                                            alt="{{ game.name }}"
+                                        >
+                                    {% else %}
+                                        <span class="no-image">
+                                            No image
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <strong>{{ game.name }}</strong>
+
+                                    <p class="table-description">
+                                        {{ game.description|truncatewords:12 }}
+                                    </p>
+                                </td>
+
+                                <td>
+                                    {% if game.is_active %}
+                                        <span class="status-badge status-active">
+                                            Active
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge status-inactive">
+                                            Inactive
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ game.service_categories.count }}
+                                </td>
+
+                                <td>
+                                    {{ game.ranks.count }}
+                                </td>
+
+                                <td>
+                                    <div class="table-actions">
+                                        <a
+                                            class="btn btn-sm btn-outline-light"
+                                            href="{% url 'controlpanel:game_update' game.id %}"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            class="btn btn-sm btn-outline-danger"
+                                            href="{% url 'controlpanel:game_delete_confirmation' game.id %}"
+                                        >
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td
+                                    class="empty-table"
+                                    colspan="6"
+                                >
+                                    No games have been added yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <a
+                class="back-link"
+                href="{% url 'controlpanel:dashboard' %}"
+            >
+                ← Back to Control Panel
+            </a>
+        </div>
+    </section>
+{% endblock %}
