@@ -94,3 +94,203 @@ body {
     background-color: var(--papasmurfs-purple);
     color: #ffffff;
 }
+
+.catalogue-header {
+    padding: 5rem 1rem 3rem;
+    background:
+        linear-gradient(
+            rgba(9, 13, 18, 0.85),
+            rgba(9, 13, 18, 1)
+        ),
+        radial-gradient(
+            circle at top right,
+            var(--papasmurfs-purple),
+            transparent 55%
+        );
+}
+
+.catalogue-header h1 {
+    margin-bottom: 1rem;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+}
+
+.catalogue-header p:last-child {
+    max-width: 650px;
+    color: #c5ced8;
+    font-size: 1.1rem;
+}
+
+.section-label {
+    margin-bottom: 0.75rem;
+    color: var(--papasmurfs-cyan);
+    font-weight: 800;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+}
+
+.catalogue-section {
+    min-height: 60vh;
+    padding: 3rem 1rem 5rem;
+}
+
+.package-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.22);
+}
+
+.package-card:hover {
+    border-color: var(--papasmurfs-cyan);
+    transform: translateY(-4px);
+    transition: 0.2s ease;
+}
+
+.package-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.game-badge,
+.featured-badge {
+    display: inline-block;
+    padding: 0.35rem 0.7rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.game-badge {
+    background-color: rgba(35, 217, 217, 0.14);
+    color: var(--papasmurfs-cyan);
+}
+
+.featured-badge {
+    background-color: rgba(139, 92, 246, 0.2);
+    color: #c4a8ff;
+}
+
+.package-card h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.package-description {
+    color: #b9c3cf;
+}
+
+.rank-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: #0b1119;
+}
+
+.rank-route strong {
+    color: var(--papasmurfs-cyan);
+}
+
+.package-information {
+    color: #c5ced8;
+}
+
+.package-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+}
+
+.package-price {
+    margin: 0;
+    color: var(--papasmurfs-cyan);
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+
+.empty-catalogue {
+    padding: 4rem 2rem;
+    border: 1px dashed #39485a;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.package-detail-section {
+    min-height: calc(100vh - 70px);
+    padding: 4rem 1rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    color: var(--papasmurfs-cyan);
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: #ffffff;
+}
+
+.package-detail-card {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+}
+
+.package-detail-card h1 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 900;
+}
+
+.package-detail-description {
+    color: #c5ced8;
+    font-size: 1.1rem;
+}
+
+.rank-route-large {
+    max-width: 600px;
+    font-size: 1.25rem;
+}
+
+.package-purchase-panel {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: #0b1119;
+}
+
+.purchase-label {
+    color: #9ba8b6;
+}
+
+.package-detail-price {
+    color: var(--papasmurfs-cyan);
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+@media (max-width: 767px) {
+    .package-detail-card {
+        grid-template-columns: 1fr;
+    }
+
+    .package-card-bottom {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

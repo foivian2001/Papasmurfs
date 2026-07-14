@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Boosting Services | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="catalogue-header">
+        <div class="container">
+            <p class="section-label">
+                Papasmurfs catalogue
+            </p>
+
+            <h1>Choose your boost</h1>
+
+            <p>
+                Select your game, current rank and desired destination.
+                We will handle the climb.
+            </p>
+        </div>
+    </section>
+
+    <section class="catalogue-section">
+        <div class="container">
+            <div class="row g-4">
+                {% for package in packages %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="package-card h-100">
+                            <div class="package-card-top">
+                                <span class="game-badge">
+                                    {{ package.category.game.name }}
+                                </span>
+
+                                {% if package.is_featured %}
+                                    <span class="featured-badge">
+                                        Featured
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <h2>{{ package.name }}</h2>
+
+                            <p class="package-description">
+                                {{ package.description|truncatewords:24 }}
+                            </p>
+
+                            <div class="rank-route">
+                                <span>{{ package.current_rank.name }}</span>
+                                <strong>→</strong>
+                                <span>{{ package.target_rank.name }}</span>
+                            </div>
+
+                            <div class="package-information">
+                                <p>
+                                    <strong>Category:</strong>
+                                    {{ package.category.name }}
+                                </p>
+
+                                <p>
+                                    <strong>Estimated time:</strong>
+                                    {{ package.estimated_days }}
+                                    day{{ package.estimated_days|pluralize }}
+                                </p>
+                            </div>
+
+                            <div class="package-card-bottom">
+                                <p class="package-price">
+                                    €{{ package.price }}
+                                </p>
+
+                                <a
+                                    class="btn btn-boost"
+                                    href="{% url 'catalogue:package_detail' package.id %}"
+                                >
+                                    View package
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="empty-catalogue">
+                            <h2>No packages available yet</h2>
+
+                            <p>
+                                The catalogue is connected correctly,
+                                but we have not added our sample services yet.
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

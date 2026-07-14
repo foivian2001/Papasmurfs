@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ package.name }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="package-detail-section">
+        <div class="container">
+            <a
+                class="back-link"
+                href="{% url 'catalogue:package_list' %}"
+            >
+                ← Back to all services
+            </a>
+
+            <div class="package-detail-card">
+                <div>
+                    <p class="section-label">
+                        {{ package.category.game.name }}
+                    </p>
+
+                    <h1>{{ package.name }}</h1>
+
+                    <p class="package-detail-description">
+                        {{ package.description }}
+                    </p>
+
+                    <div class="rank-route rank-route-large">
+                        <span>{{ package.current_rank.name }}</span>
+                        <strong>→</strong>
+                        <span>{{ package.target_rank.name }}</span>
+                    </div>
+                </div>
+
+                <aside class="package-purchase-panel">
+                    <p class="purchase-label">
+                        Service price
+                    </p>
+
+                    <p class="package-detail-price">
+                        €{{ package.price }}
+                    </p>
+
+                    <p>
+                        Estimated completion:
+                        <strong>
+                            {{ package.estimated_days }}
+                            day{{ package.estimated_days|pluralize }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        Service type:
+                        <strong>{{ package.category.name }}</strong>
+                    </p>
+
+                    <button
+                        class="btn btn-boost btn-lg w-100"
+                        type="button"
+                        disabled
+                    >
+                        Cart coming next
+                    </button>
+                </aside>
+            </div>
+        </div>
+    </section>
+{% endblock %}
