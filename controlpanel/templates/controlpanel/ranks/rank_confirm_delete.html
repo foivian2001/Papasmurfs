@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete {{ rank.name }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="delete-confirmation-card">
+                <p class="section-label">
+                    Confirm deletion
+                </p>
+
+                <h1>Delete {{ rank.name }}?</h1>
+
+                <p>
+                    This rank belongs to
+                    <strong>{{ rank.game.name }}</strong>.
+                </p>
+
+                {% if starting_package_count or target_package_count %}
+                    <p class="delete-warning">
+                        This rank is currently used by
+                        {{ starting_package_count }} starting package(s)
+                        and {{ target_package_count }} target package(s).
+                    </p>
+
+                    <p>
+                        Django will prevent deletion until those packages
+                        are changed or removed.
+                    </p>
+                {% else %}
+                    <p class="delete-warning">
+                        This action cannot be undone.
+                    </p>
+                {% endif %}
+
+                <form
+                    method="post"
+                    action="{% url 'controlpanel:rank_delete' rank.id %}"
+                >
+                    {% csrf_token %}
+
+                    <div class="form-actions">
+                        <button
+                            class="btn btn-danger"
+                            type="submit"
+                        >
+                            Permanently delete
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'controlpanel:rank_list' %}"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -49,4 +49,30 @@ urlpatterns = [
         views.category_delete,
         name="category_delete",
     ),
+
+        path(
+        "ranks/",
+        views.rank_list,
+        name="rank_list",
+    ),
+    path(
+        "ranks/add/",
+        views.rank_create,
+        name="rank_create",
+    ),
+    path(
+        "ranks/<int:rank_id>/edit/",
+        views.rank_update,
+        name="rank_update",
+    ),
+    path(
+        "ranks/<int:rank_id>/delete/",
+        views.rank_delete_confirmation,
+        name="rank_delete_confirmation",
+    ),
+    path(
+        "ranks/<int:rank_id>/delete/confirm/",
+        views.rank_delete,
+        name="rank_delete",
+    ),
 ]

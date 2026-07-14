@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Manage Ranks | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="management-page-heading">
+                <div>
+                    <p class="section-label">
+                        Catalogue administration
+                    </p>
+
+                    <h1>Manage Ranks</h1>
+
+                    <p>
+                        Define the competitive rank progression
+                        available for each game.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-boost"
+                    href="{% url 'controlpanel:rank_create' %}"
+                >
+                    Add new rank
+                </a>
+            </div>
+
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div
+                            class="
+                                site-message
+                                {% if message.tags == 'error' %}
+                                    site-message-error
+                                {% endif %}
+                            "
+                        >
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="management-table-wrapper">
+                <table class="management-table">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            <th>Rank</th>
+                            <th>Order</th>
+                            <th>Starting packages</th>
+                            <th>Target packages</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for rank in ranks %}
+                            <tr>
+                                <td>
+                                    <strong>
+                                        {{ rank.game.name }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ rank.name }}
+                                </td>
+
+                                <td>
+                                    <span class="rank-order-badge">
+                                        {{ rank.rank_order }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {{ rank.packages_starting_here.count }}
+                                </td>
+
+                                <td>
+                                    {{ rank.packages_ending_here.count }}
+                                </td>
+
+                                <td>
+                                    <div class="table-actions">
+                                        <a
+                                            class="btn btn-sm btn-outline-light"
+                                            href="{% url 'controlpanel:rank_update' rank.id %}"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            class="btn btn-sm btn-outline-danger"
+                                            href="{% url 'controlpanel:rank_delete_confirmation' rank.id %}"
+                                        >
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td
+                                    class="empty-table"
+                                    colspan="6"
+                                >
+                                    No competitive ranks have been added yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <a
+                class="back-link"
+                href="{% url 'controlpanel:dashboard' %}"
+            >
+                ← Back to Control Panel
+            </a>
+        </div>
+    </section>
+{% endblock %}

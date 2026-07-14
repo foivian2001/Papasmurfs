@@ -1,6 +1,6 @@
 from django import forms
 
-from catalogue.models import Game, ServiceCategory
+from catalogue.models import Game, Rank, ServiceCategory
 
 
 class GameForm(forms.ModelForm):
@@ -71,3 +71,69 @@ class ServiceCategoryForm(forms.ModelForm):
                 },
             ),
         }
+
+class RankForm(forms.ModelForm):
+    """Form used by staff to create and update competitive ranks."""
+
+    class Meta:
+        model = Rank
+        fields = [
+            "game",
+            "name",
+            "rank_order",
+        ]
+        widgets = {
+            "game": forms.Select(
+                attrs={
+                    "class": "form-select",
+                },
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Example: Gold",
+                },
+            ),
+            "rank_order": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "min": 1,
+                    "placeholder": "Example: 4",
+                },
+            ),
+        }
+
+    def clean(self):
+        """Prevent duplicate rank names and ordering values per game."""
+
+        cleaned_data = super().clean()
+
+        game = cleaned_data.get("game")
+        name = cleaned_data.get("name")
+        rank_order = cleaned_data.get("rank_order")
+
+        if not game:
+            return cleaned_data
+
+        ranks = Rank.objects.filter(game=game)
+
+        if self.instance.pk:
+            ranks = ranks.exclude(pk=self.instance.pk)
+
+        if name and ranks.filter(name__iexact=name).exists():
+            self.add_error(
+                "name",
+                "A rank with this name already exists for the selected game.",
+            )
+
+        if (
+            rank_order is not None
+            and ranks.filter(rank_order=rank_order).exists()
+        ):
+            self.add_error(
+                "rank_order",
+                "This order number is already used by another rank "
+                "for the selected game.",
+            )
+
+        return cleaned_data

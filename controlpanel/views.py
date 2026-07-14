@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models.deletion import ProtectedError
 from django.views.decorators.http import require_POST
 
 from catalogue.models import (
@@ -11,7 +12,7 @@ from catalogue.models import (
 )
 
 from .decorators import staff_required
-from .forms import GameForm, ServiceCategoryForm
+from .forms import GameForm, RankForm, ServiceCategoryForm
 
 
 @staff_required
@@ -288,3 +289,148 @@ def category_delete(request, category_id):
     )
 
     return redirect("controlpanel:category_list")
+
+@staff_required
+def rank_list(request):
+    """Display all competitive ranks."""
+
+    ranks = Rank.objects.select_related("game")
+
+    context = {
+        "ranks": ranks,
+    }
+
+    return render(
+        request,
+        "controlpanel/ranks/rank_list.html",
+        context,
+    )
+
+
+@staff_required
+def rank_create(request):
+    """Allow staff members to create a competitive rank."""
+
+    form = RankForm(
+        request.POST or None,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        rank = form.save()
+
+        messages.success(
+            request,
+            f"{rank.name} was created successfully.",
+        )
+
+        return redirect("controlpanel:rank_list")
+
+    context = {
+        "form": form,
+        "page_title": "Add rank",
+        "submit_text": "Create rank",
+    }
+
+    return render(
+        request,
+        "controlpanel/ranks/rank_form.html",
+        context,
+    )
+
+
+@staff_required
+def rank_update(request, rank_id):
+    """Allow staff members to update an existing rank."""
+
+    rank = get_object_or_404(
+        Rank,
+        id=rank_id,
+    )
+
+    form = RankForm(
+        request.POST or None,
+        instance=rank,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        updated_rank = form.save()
+
+        messages.success(
+            request,
+            f"{updated_rank.name} was updated successfully.",
+        )
+
+        return redirect("controlpanel:rank_list")
+
+    context = {
+        "form": form,
+        "rank": rank,
+        "page_title": f"Edit {rank.name}",
+        "submit_text": "Save changes",
+    }
+
+    return render(
+        request,
+        "controlpanel/ranks/rank_form.html",
+        context,
+    )
+
+
+@staff_required
+def rank_delete_confirmation(request, rank_id):
+    """Display confirmation before deleting a competitive rank."""
+
+    rank = get_object_or_404(
+        Rank.objects.select_related("game"),
+        id=rank_id,
+    )
+
+    context = {
+        "rank": rank,
+        "starting_package_count": (
+            rank.packages_starting_here.count()
+        ),
+        "target_package_count": (
+            rank.packages_ending_here.count()
+        ),
+    }
+
+    return render(
+        request,
+        "controlpanel/ranks/rank_confirm_delete.html",
+        context,
+    )
+
+
+@staff_required
+@require_POST
+def rank_delete(request, rank_id):
+    """Delete a rank unless it is being used by a boost package."""
+
+    rank = get_object_or_404(
+        Rank,
+        id=rank_id,
+    )
+
+    rank_name = rank.name
+
+    try:
+        rank.delete()
+    except ProtectedError:
+        messages.error(
+            request,
+            (
+                f"{rank_name} cannot be deleted because it is used "
+                "by one or more boost packages."
+            ),
+        )
+
+        return redirect("controlpanel:rank_list")
+
+    messages.success(
+        request,
+        f"{rank_name} was deleted successfully.",
+    )
+
+    return redirect("controlpanel:rank_list")
+
