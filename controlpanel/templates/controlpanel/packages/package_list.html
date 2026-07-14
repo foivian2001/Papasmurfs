@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Manage Boost Packages | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="management-page-heading">
+                <div>
+                    <p class="section-label">
+                        Catalogue administration
+                    </p>
+
+                    <h1>Manage Boost Packages</h1>
+
+                    <p>
+                        Create and manage the purchasable services
+                        displayed in the public catalogue.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-boost"
+                    href="{% url 'controlpanel:package_create' %}"
+                >
+                    Add new package
+                </a>
+            </div>
+
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="management-table-wrapper">
+                <table class="management-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Package</th>
+                            <th>Game</th>
+                            <th>Rank route</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for package in packages %}
+                            <tr>
+                                <td>
+                                    {% if package.image %}
+                                        <img
+                                            class="management-thumbnail"
+                                            src="{{ package.image.url }}"
+                                            alt="{{ package.name }}"
+                                        >
+                                    {% else %}
+                                        <span class="no-image">
+                                            No image
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <strong>{{ package.name }}</strong>
+
+                                    <p class="table-description">
+                                        {{ package.category.name }}
+                                    </p>
+
+                                    {% if package.is_featured %}
+                                        <span class="featured-badge">
+                                            Featured
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ package.category.game.name }}
+                                </td>
+
+                                <td>
+                                    {{ package.current_rank.name }}
+                                    →
+
+                                    {{ package.target_rank.name }}
+                                </td>
+
+                                <td>
+                                    <strong>€{{ package.price }}</strong>
+
+                                    <p class="table-description">
+                                        {{ package.estimated_days }}
+                                        day{{ package.estimated_days|pluralize }}
+                                    </p>
+                                </td>
+
+                                <td>
+                                    {% if package.is_active %}
+                                        <span class="status-badge status-active">
+                                            Active
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge status-inactive">
+                                            Inactive
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="table-actions">
+                                        <a
+                                            class="btn btn-sm btn-outline-light"
+                                            href="{% url 'controlpanel:package_update' package.id %}"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            class="btn btn-sm btn-outline-danger"
+                                            href="{% url 'controlpanel:package_delete_confirmation' package.id %}"
+                                        >
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td
+                                    class="empty-table"
+                                    colspan="7"
+                                >
+                                    No boost packages have been created yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <a
+                class="back-link"
+                href="{% url 'controlpanel:dashboard' %}"
+            >
+                ← Back to Control Panel
+            </a>
+        </div>
+    </section>
+{% endblock %}

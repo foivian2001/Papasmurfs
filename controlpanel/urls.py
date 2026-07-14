@@ -75,4 +75,30 @@ urlpatterns = [
         views.rank_delete,
         name="rank_delete",
     ),
+
+        path(
+        "packages/",
+        views.package_management_list,
+        name="package_list",
+    ),
+    path(
+        "packages/add/",
+        views.package_create,
+        name="package_create",
+    ),
+    path(
+        "packages/<int:package_id>/edit/",
+        views.package_update,
+        name="package_update",
+    ),
+    path(
+        "packages/<int:package_id>/delete/",
+        views.package_delete_confirmation,
+        name="package_delete_confirmation",
+    ),
+    path(
+        "packages/<int:package_id>/delete/confirm/",
+        views.package_delete,
+        name="package_delete",
+    ),
 ]

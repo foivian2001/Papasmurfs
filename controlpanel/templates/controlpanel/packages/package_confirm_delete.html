@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete {{ package.name }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="delete-confirmation-card">
+                <p class="section-label">
+                    Confirm deletion
+                </p>
+
+                <h1>Delete {{ package.name }}?</h1>
+
+                <p>
+                    Game:
+                    <strong>
+                        {{ package.category.game.name }}
+                    </strong>
+                </p>
+
+                <p>
+                    Rank route:
+                    <strong>
+                        {{ package.current_rank.name }}
+                        →
+                        {{ package.target_rank.name }}
+                    </strong>
+                </p>
+
+                <p>
+                    Price:
+                    <strong>€{{ package.price }}</strong>
+                </p>
+
+                <p class="delete-warning">
+                    This action cannot be undone.
+                </p>
+
+                <form
+                    method="post"
+                    action="{% url 'controlpanel:package_delete' package.id %}"
+                >
+                    {% csrf_token %}
+
+                    <div class="form-actions">
+                        <button
+                            class="btn btn-danger"
+                            type="submit"
+                        >
+                            Permanently delete
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'controlpanel:package_list' %}"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

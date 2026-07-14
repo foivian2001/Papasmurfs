@@ -12,7 +12,12 @@ from catalogue.models import (
 )
 
 from .decorators import staff_required
-from .forms import GameForm, RankForm, ServiceCategoryForm
+from .forms import (
+    BoostPackageForm,
+    GameForm,
+    RankForm,
+    ServiceCategoryForm,
+)
 
 
 @staff_required
@@ -434,3 +439,140 @@ def rank_delete(request, rank_id):
 
     return redirect("controlpanel:rank_list")
 
+@staff_required
+def package_management_list(request):
+    """Display all boost packages in the custom control panel."""
+
+    packages = BoostPackage.objects.select_related(
+        "category",
+        "category__game",
+        "current_rank",
+        "target_rank",
+    )
+
+    context = {
+        "packages": packages,
+    }
+
+    return render(
+        request,
+        "controlpanel/packages/package_list.html",
+        context,
+    )
+
+
+@staff_required
+def package_create(request):
+    """Allow staff members to create a boost package."""
+
+    form = BoostPackageForm(
+        request.POST or None,
+        request.FILES or None,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        package = form.save()
+
+        messages.success(
+            request,
+            f"{package.name} was created successfully.",
+        )
+
+        return redirect("controlpanel:package_list")
+
+    context = {
+        "form": form,
+        "page_title": "Add boost package",
+        "submit_text": "Create package",
+    }
+
+    return render(
+        request,
+        "controlpanel/packages/package_form.html",
+        context,
+    )
+
+
+@staff_required
+def package_update(request, package_id):
+    """Allow staff members to update an existing boost package."""
+
+    package = get_object_or_404(
+        BoostPackage,
+        id=package_id,
+    )
+
+    form = BoostPackageForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=package,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        updated_package = form.save()
+
+        messages.success(
+            request,
+            f"{updated_package.name} was updated successfully.",
+        )
+
+        return redirect("controlpanel:package_list")
+
+    context = {
+        "form": form,
+        "package": package,
+        "page_title": f"Edit {package.name}",
+        "submit_text": "Save changes",
+    }
+
+    return render(
+        request,
+        "controlpanel/packages/package_form.html",
+        context,
+    )
+
+
+@staff_required
+def package_delete_confirmation(request, package_id):
+    """Display confirmation before deleting a boost package."""
+
+    package = get_object_or_404(
+        BoostPackage.objects.select_related(
+            "category",
+            "category__game",
+            "current_rank",
+            "target_rank",
+        ),
+        id=package_id,
+    )
+
+    context = {
+        "package": package,
+    }
+
+    return render(
+        request,
+        "controlpanel/packages/package_confirm_delete.html",
+        context,
+    )
+
+
+@staff_required
+@require_POST
+def package_delete(request, package_id):
+    """Delete a boost package after receiving a confirmed POST request."""
+
+    package = get_object_or_404(
+        BoostPackage,
+        id=package_id,
+    )
+
+    package_name = package.name
+    package.delete()
+
+    messages.success(
+        request,
+        f"{package_name} was deleted successfully.",
+    )
+
+    return redirect("controlpanel:package_list")
