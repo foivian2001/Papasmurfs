@@ -1,6 +1,6 @@
 from django import forms
 
-from catalogue.models import Game
+from catalogue.models import Game, ServiceCategory
 
 
 class GameForm(forms.ModelForm):
@@ -37,6 +37,37 @@ class GameForm(forms.ModelForm):
             "is_active": forms.CheckboxInput(
                 attrs={
                     "class": "form-check-input",
+                },
+            ),
+        }
+
+class ServiceCategoryForm(forms.ModelForm):
+    """Form used by staff to create and update service categories."""
+
+    class Meta:
+        model = ServiceCategory
+        fields = [
+            "game",
+            "name",
+            "description",
+        ]
+        widgets = {
+            "game": forms.Select(
+                attrs={
+                    "class": "form-select",
+                },
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Example: Solo/Duo Boost",
+                },
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 4,
+                    "placeholder": "Describe this type of boosting service.",
                 },
             ),
         }

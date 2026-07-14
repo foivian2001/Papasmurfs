@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Manage Categories | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="management-page-heading">
+                <div>
+                    <p class="section-label">
+                        Catalogue administration
+                    </p>
+
+                    <h1>Manage Service Categories</h1>
+
+                    <p>
+                        Organise the available service types for each game.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-boost"
+                    href="{% url 'controlpanel:category_create' %}"
+                >
+                    Add new category
+                </a>
+            </div>
+
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="management-table-wrapper">
+                <table class="management-table">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Packages</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for category in categories %}
+                            <tr>
+                                <td>
+                                    <strong>
+                                        {{ category.game.name }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ category.name }}
+                                </td>
+
+                                <td>
+                                    <p class="table-description">
+                                        {% if category.description %}
+                                            {{ category.description|truncatewords:15 }}
+                                        {% else %}
+                                            No description provided.
+                                        {% endif %}
+                                    </p>
+                                </td>
+
+                                <td>
+                                    {{ category.packages.count }}
+                                </td>
+
+                                <td>
+                                    <div class="table-actions">
+                                        <a
+                                            class="btn btn-sm btn-outline-light"
+                                            href="{% url 'controlpanel:category_update' category.id %}"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        <a
+                                            class="btn btn-sm btn-outline-danger"
+                                            href="{% url 'controlpanel:category_delete_confirmation' category.id %}"
+                                        >
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td
+                                    class="empty-table"
+                                    colspan="5"
+                                >
+                                    No service categories have been added yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <a
+                class="back-link"
+                href="{% url 'controlpanel:dashboard' %}"
+            >
+                ← Back to Control Panel
+            </a>
+        </div>
+    </section>
+{% endblock %}

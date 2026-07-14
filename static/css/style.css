@@ -669,3 +669,21 @@ body {
         padding: 1.5rem;
     }
 }
+
+.management-form-card .form-select {
+    border: 1px solid #354255;
+    background-color: #0b1119;
+    color: #ffffff;
+}
+
+.management-form-card .form-select:focus {
+    border-color: var(--papasmurfs-cyan);
+    background-color: #0b1119;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(35, 217, 217, 0.12);
+}
+
+.management-form-card .form-select option {
+    background-color: #0b1119;
+    color: #ffffff;
+}

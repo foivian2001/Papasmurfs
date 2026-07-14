@@ -23,4 +23,30 @@ urlpatterns = [
         views.game_delete,
         name="game_delete",
     ),
+
+    path(
+        "categories/",
+        views.category_list,
+        name="category_list",
+    ),
+        path(
+        "categories/add/",
+        views.category_create,
+        name="category_create",
+    ),
+    path(
+        "categories/<int:category_id>/edit/",
+        views.category_update,
+        name="category_update",
+    ),
+        path(
+        "categories/<int:category_id>/delete/",
+        views.category_delete_confirmation,
+        name="category_delete_confirmation",
+    ),
+        path(
+        "categories/<int:category_id>/delete/confirm/",
+        views.category_delete,
+        name="category_delete",
+    ),
 ]

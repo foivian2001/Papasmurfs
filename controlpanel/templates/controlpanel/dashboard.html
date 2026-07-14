@@ -68,7 +68,8 @@
                     <h2>Games</h2>
 
                     <p>
-                        Create, edit and remove supported competitive games.
+                        Create, edit, activate and remove supported
+                        competitive games.
                     </p>
 
                     <a
@@ -83,23 +84,34 @@
                     <h2>Categories and ranks</h2>
 
                     <p>
-                        Organise each game's services and competitive ranks.
+                        Organise each game's service types and
+                        competitive rank structure.
                     </p>
 
-                    <button
-                        class="btn btn-boost"
-                        type="button"
-                        disabled
-                    >
-                        Management coming next
-                    </button>
+                    <div class="form-actions">
+                        <a
+                            class="btn btn-boost"
+                            href="{% url 'controlpanel:category_list' %}"
+                        >
+                            Manage categories
+                        </a>
+
+                        <button
+                            class="btn btn-outline-light"
+                            type="button"
+                            disabled
+                        >
+                            Ranks coming next
+                        </button>
+                    </div>
                 </article>
 
                 <article class="management-card">
                     <h2>Boost packages</h2>
 
                     <p>
-                        Manage prices, destinations and completion estimates.
+                        Manage prices, starting ranks, target ranks
+                        and completion estimates.
                     </p>
 
                     <button
@@ -115,7 +127,8 @@
                     <h2>Users</h2>
 
                     <p>
-                        Review registered users and their assigned roles.
+                        Review registered users and manage their
+                        assigned roles.
                     </p>
 
                     <button

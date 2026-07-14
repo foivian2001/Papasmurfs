@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete {{ category.name }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="delete-confirmation-card">
+                <p class="section-label">
+                    Confirm deletion
+                </p>
+
+                <h1>Delete {{ category.name }}?</h1>
+
+                <p>
+                    This category belongs to
+                    <strong>{{ category.game.name }}</strong>.
+                </p>
+
+                <p>
+                    Any boost packages connected to this category
+                    will also be deleted.
+                </p>
+
+                <p class="delete-warning">
+                    This action cannot be undone.
+                </p>
+
+                <form
+                    method="post"
+                    action="{% url 'controlpanel:category_delete' category.id %}"
+                >
+                    {% csrf_token %}
+
+                    <div class="form-actions">
+                        <button
+                            class="btn btn-danger"
+                            type="submit"
+                        >
+                            Permanently delete
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'controlpanel:category_list' %}"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

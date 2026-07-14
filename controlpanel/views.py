@@ -11,7 +11,7 @@ from catalogue.models import (
 )
 
 from .decorators import staff_required
-from .forms import GameForm
+from .forms import GameForm, ServiceCategoryForm
 
 
 @staff_required
@@ -162,3 +162,129 @@ def game_delete(request, game_id):
     )
 
     return redirect("controlpanel:game_list")
+
+@staff_required
+def category_list(request):
+    """Display all service categories."""
+
+    categories = ServiceCategory.objects.select_related("game")
+
+    context = {
+        "categories": categories,
+    }
+
+    return render(
+        request,
+        "controlpanel/categories/category_list.html",
+        context,
+    )
+
+
+@staff_required
+def category_create(request):
+    """Allow staff members to create a service category."""
+
+    form = ServiceCategoryForm(
+        request.POST or None,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        category = form.save()
+
+        messages.success(
+            request,
+            f"{category.name} was created successfully.",
+        )
+
+        return redirect("controlpanel:category_list")
+
+    context = {
+        "form": form,
+        "page_title": "Add service category",
+        "submit_text": "Create category",
+    }
+
+    return render(
+        request,
+        "controlpanel/categories/category_form.html",
+        context,
+    )
+
+
+@staff_required
+def category_update(request, category_id):
+    """Allow staff members to update a service category."""
+
+    category = get_object_or_404(
+        ServiceCategory,
+        id=category_id,
+    )
+
+    form = ServiceCategoryForm(
+        request.POST or None,
+        instance=category,
+    )
+
+    if request.method == "POST" and form.is_valid():
+        updated_category = form.save()
+
+        messages.success(
+            request,
+            f"{updated_category.name} was updated successfully.",
+        )
+
+        return redirect("controlpanel:category_list")
+
+    context = {
+        "form": form,
+        "category": category,
+        "page_title": f"Edit {category.name}",
+        "submit_text": "Save changes",
+    }
+
+    return render(
+        request,
+        "controlpanel/categories/category_form.html",
+        context,
+    )
+
+
+@staff_required
+def category_delete_confirmation(request, category_id):
+    """Display confirmation before deleting a category."""
+
+    category = get_object_or_404(
+        ServiceCategory.objects.select_related("game"),
+        id=category_id,
+    )
+
+    context = {
+        "category": category,
+    }
+
+    return render(
+        request,
+        "controlpanel/categories/category_confirm_delete.html",
+        context,
+    )
+
+
+@staff_required
+@require_POST
+def category_delete(request, category_id):
+    """Delete a category after receiving a confirmed POST request."""
+
+    category = get_object_or_404(
+        ServiceCategory,
+        id=category_id,
+    )
+
+    category_name = category.name
+    category.delete()
+
+    messages.success(
+        request,
+        f"{category_name} was deleted successfully.",
+    )
+
+    return redirect("controlpanel:category_list")
