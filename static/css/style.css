@@ -358,3 +358,139 @@ body {
     border: 0;
     background: transparent;
 }
+
+.control-panel-section {
+    min-height: calc(100vh - 70px);
+    padding: 4rem 1rem;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(139, 92, 246, 0.18),
+            transparent 40%
+        ),
+        var(--papasmurfs-dark);
+}
+
+.control-panel-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.control-panel-heading h1 {
+    margin-bottom: 1rem;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 900;
+}
+
+.control-panel-heading p:last-child {
+    max-width: 700px;
+    margin-bottom: 0;
+    color: #b9c3cf;
+}
+
+.staff-badge {
+    display: inline-block;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--papasmurfs-purple);
+    border-radius: 2rem;
+    background-color: rgba(139, 92, 246, 0.12);
+    color: #c4a8ff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.stat-card {
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.18);
+}
+
+.stat-card:hover {
+    border-color: var(--papasmurfs-cyan);
+    transform: translateY(-3px);
+    transition: 0.2s ease;
+}
+
+.stat-card p {
+    margin-bottom: 0.5rem;
+    color: #aab5c2;
+    font-weight: 700;
+}
+
+.stat-card strong {
+    color: var(--papasmurfs-cyan);
+    font-size: 2.25rem;
+    font-weight: 900;
+}
+
+.management-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.management-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.16);
+}
+
+.management-card:hover {
+    border-color: var(--papasmurfs-purple);
+    transform: translateY(-3px);
+    transition: 0.2s ease;
+}
+
+.management-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.management-card p {
+    margin-bottom: 1.5rem;
+    color: #b9c3cf;
+}
+
+.management-card .btn {
+    margin-top: auto;
+}
+
+.management-card .btn:disabled {
+    border-color: #3a4655;
+    background-color: #242d39;
+    color: #7f8a98;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .control-panel-section {
+        padding: 2.5rem 1rem;
+    }
+
+    .control-panel-heading {
+        flex-direction: column;
+    }
+
+    .staff-badge {
+        white-space: normal;
+    }
+
+    .management-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Control Panel | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="control-panel-heading">
+                <div>
+                    <p class="section-label">
+                        Staff administration
+                    </p>
+
+                    <h1>Papasmurfs Control Panel</h1>
+
+                    <p>
+                        Manage the catalogue, users and business activity
+                        from one protected area.
+                    </p>
+                </div>
+
+                <span class="staff-badge">
+                    Logged in as {{ user.username }}
+                </span>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-xl">
+                    <article class="stat-card">
+                        <p>Games</p>
+                        <strong>{{ game_count }}</strong>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl">
+                    <article class="stat-card">
+                        <p>Categories</p>
+                        <strong>{{ category_count }}</strong>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl">
+                    <article class="stat-card">
+                        <p>Ranks</p>
+                        <strong>{{ rank_count }}</strong>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl">
+                    <article class="stat-card">
+                        <p>Packages</p>
+                        <strong>{{ package_count }}</strong>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl">
+                    <article class="stat-card">
+                        <p>Users</p>
+                        <strong>{{ user_count }}</strong>
+                    </article>
+                </div>
+            </div>
+
+            <div class="management-grid">
+                <article class="management-card">
+                    <h2>Games</h2>
+                    <p>
+                        Create, edit and remove supported competitive games.
+                    </p>
+
+                    <button
+                        class="btn btn-boost"
+                        type="button"
+                        disabled
+                    >
+                        Management coming next
+                    </button>
+                </article>
+
+                <article class="management-card">
+                    <h2>Categories and ranks</h2>
+                    <p>
+                        Organise each game's services and competitive ranks.
+                    </p>
+
+                    <button
+                        class="btn btn-boost"
+                        type="button"
+                        disabled
+                    >
+                        Management coming next
+                    </button>
+                </article>
+
+                <article class="management-card">
+                    <h2>Boost packages</h2>
+                    <p>
+                        Manage prices, destinations and completion estimates.
+                    </p>
+
+                    <button
+                        class="btn btn-boost"
+                        type="button"
+                        disabled
+                    >
+                        Management coming next
+                    </button>
+                </article>
+
+                <article class="management-card">
+                    <h2>Users</h2>
+                    <p>
+                        Review registered users and their assigned roles.
+                    </p>
+
+                    <button
+                        class="btn btn-boost"
+                        type="button"
+                        disabled
+                    >
+                        Management coming later
+                    </button>
+                </article>
+            </div>
+        </div>
+    </section>
+{% endblock %}
