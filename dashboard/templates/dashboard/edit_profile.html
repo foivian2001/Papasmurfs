@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edit Profile | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="member-dashboard-section">
+        <div class="container">
+            <div class="profile-form-card">
+                <p class="section-label">
+                    Member profile
+                </p>
+
+                <h1>Edit your profile</h1>
+
+                <p class="form-introduction">
+                    Update your account information and personalise
+                    your Papasmurfs experience.
+                </p>
+
+                <form
+                    method="post"
+                    enctype="multipart/form-data"
+                >
+                    {% csrf_token %}
+
+                    {% if account_form.non_field_errors %}
+                        <div class="site-message site-message-error">
+                            {% for error in account_form.non_field_errors %}
+                                <p class="mb-0">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if profile_form.non_field_errors %}
+                        <div class="site-message site-message-error">
+                            {% for error in profile_form.non_field_errors %}
+                                <p class="mb-0">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <h2 class="profile-form-heading">
+                        Account information
+                    </h2>
+
+                    {% for field in account_form %}
+                        <div class="mb-4">
+                            <label
+                                class="form-label"
+                                for="{{ field.id_for_label }}"
+                            >
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% for error in field.errors %}
+                                <p class="form-error">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <h2 class="profile-form-heading">
+                        Profile information
+                    </h2>
+
+                    {% for field in profile_form %}
+                        <div class="mb-4">
+                            <label
+                                class="form-label"
+                                for="{{ field.id_for_label }}"
+                            >
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% for error in field.errors %}
+                                <p class="form-error">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-actions">
+                        <button
+                            class="btn btn-boost"
+                            type="submit"
+                        >
+                            Save profile
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'dashboard:home' %}"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

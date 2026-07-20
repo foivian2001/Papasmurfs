@@ -819,3 +819,132 @@ body {
         width: 100%;
     }
 }
+
+.member-dashboard-section {
+    min-height: calc(100vh - 70px);
+    padding: 4rem 1rem;
+}
+
+.member-dashboard-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.member-dashboard-heading h1 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 900;
+}
+
+.member-dashboard-heading p:last-child {
+    max-width: 650px;
+    color: #b9c3cf;
+}
+
+.profile-summary-card,
+.dashboard-activity-card,
+.profile-form-card {
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+}
+
+.profile-summary-card,
+.dashboard-activity-card {
+    padding: 2rem;
+}
+
+.profile-form-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.profile-form-card h1 {
+    font-weight: 900;
+}
+
+.profile-form-heading {
+    margin-top: 2rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #273241;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.profile-avatar,
+.profile-avatar-placeholder {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 1.5rem;
+    border: 3px solid var(--papasmurfs-cyan);
+    border-radius: 50%;
+}
+
+.profile-avatar {
+    object-fit: cover;
+}
+
+.profile-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0b1119;
+    font-size: 3rem;
+    font-weight: 900;
+}
+
+.profile-summary-card h2,
+.dashboard-activity-card h2 {
+    font-weight: 900;
+}
+
+.profile-username {
+    color: var(--papasmurfs-cyan);
+}
+
+.profile-bio {
+    color: #b9c3cf;
+}
+
+.profile-preference {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #354255;
+    border-radius: 0.75rem;
+    background-color: #0b1119;
+}
+
+.profile-preference span {
+    color: #b9c3cf;
+    font-size: 0.85rem;
+}
+
+.dashboard-activity-card p {
+    color: #b9c3cf;
+}
+
+.dashboard-activity-card .section-label {
+    color: var(--papasmurfs-cyan);
+}
+
+@media (max-width: 767px) {
+    .member-dashboard-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .member-dashboard-heading .btn {
+        width: 100%;
+    }
+
+    .profile-form-card {
+        padding: 1.25rem;
+    }
+}

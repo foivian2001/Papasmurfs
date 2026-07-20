@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}
+    My Dashboard | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="member-dashboard-section">
+        <div class="container">
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="member-dashboard-heading">
+                <div>
+                    <p class="section-label">
+                        Member area
+                    </p>
+
+                    <h1>
+                        Welcome,
+                        {% if profile.display_name %}
+                            {{ profile.display_name }}
+                        {% elif user.first_name %}
+                            {{ user.first_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </h1>
+
+                    <p>
+                        Review your profile and access your personal
+                        Papasmurfs activity.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-boost"
+                    href="{% url 'dashboard:edit_profile' %}"
+                >
+                    Edit profile
+                </a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-4">
+                    <article class="profile-summary-card h-100">
+                        {% if profile.avatar %}
+                            <img
+                                class="profile-avatar"
+                                src="{{ profile.avatar.url }}"
+                                alt="{{ user.username }} profile image"
+                            >
+                        {% else %}
+                            <div class="profile-avatar-placeholder">
+                                {{ user.username|first|upper }}
+                            </div>
+                        {% endif %}
+
+                        <h2>
+                            {% if profile.display_name %}
+                                {{ profile.display_name }}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                        </h2>
+
+                        <p class="profile-username">
+                            @{{ user.username }}
+                        </p>
+
+                        {% if user.email %}
+                            <p>{{ user.email }}</p>
+                        {% endif %}
+
+                        {% if profile.bio %}
+                            <p class="profile-bio">
+                                {{ profile.bio }}
+                            </p>
+                        {% else %}
+                            <p class="profile-bio">
+                                No biography has been added yet.
+                            </p>
+                        {% endif %}
+
+                        <div class="profile-preference">
+                            <span>Preferred game</span>
+
+                            <strong>
+                                {% if profile.preferred_game %}
+                                    {{ profile.preferred_game.name }}
+                                {% else %}
+                                    Not selected
+                                {% endif %}
+                            </strong>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-lg-8">
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6">
+                            <article class="dashboard-activity-card h-100">
+                                <p class="section-label">
+                                    Orders
+                                </p>
+
+                                <h2>Purchase history</h2>
+
+                                <p>
+                                    Completed and active orders will appear
+                                    here after the checkout system is added.
+                                </p>
+
+                                <span class="status-badge status-inactive">
+                                    Coming later
+                                </span>
+                            </article>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <article class="dashboard-activity-card h-100">
+                                <p class="section-label">
+                                    Reviews
+                                </p>
+
+                                <h2>Your ratings</h2>
+
+                                <p>
+                                    Your package ratings and reviews will
+                                    be displayed here.
+                                </p>
+
+                                <span class="status-badge status-inactive">
+                                    Coming later
+                                </span>
+                            </article>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <article class="dashboard-activity-card h-100">
+                                <p class="section-label">
+                                    Recommendations
+                                </p>
+
+                                <h2>Suggested services</h2>
+
+                                <p>
+                                    Personalised recommendations will use
+                                    your searches and preferred game.
+                                </p>
+
+                                {% if profile.preferred_game %}
+                                    <a
+                                        class="btn btn-outline-light"
+                                        href="{% url 'search:package_search' %}?game={{ profile.preferred_game.id }}"
+                                    >
+                                        Browse {{ profile.preferred_game.name }}
+                                    </a>
+                                {% else %}
+                                    <a
+                                        class="btn btn-outline-light"
+                                        href="{% url 'search:package_search' %}"
+                                    >
+                                        Browse services
+                                    </a>
+                                {% endif %}
+                            </article>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <article class="dashboard-activity-card h-100">
+                                <p class="section-label">
+                                    Account
+                                </p>
+
+                                <h2>Member information</h2>
+
+                                <p>
+                                    Joined:
+                                    {{ profile.created_at|date:"d F Y" }}
+                                </p>
+
+                                <p>
+                                    Last updated:
+                                    {{ profile.updated_at|date:"d F Y, H:i" }}
+                                </p>
+
+                                <a
+                                    class="btn btn-outline-light"
+                                    href="{% url 'dashboard:edit_profile' %}"
+                                >
+                                    Update details
+                                </a>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
