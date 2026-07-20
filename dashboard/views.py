@@ -1,6 +1,11 @@
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.shortcuts import redirect, render
+
+from orders.models import Order
 
 from .forms import UserAccountForm, UserProfileForm
 from .models import UserProfile
@@ -14,9 +19,28 @@ def dashboard_home(request):
         user=request.user,
     )
 
+    user_orders = Order.objects.filter(
+        user=request.user,
+    )
+
+    recent_orders = user_orders.prefetch_related(
+        "items",
+    )[:3]
+
+    completed_orders = user_orders.filter(
+        status=Order.Status.COMPLETED,
+    )
+
+    total_spent = completed_orders.aggregate(
+        total=Sum("total_price"),
+    )["total"] or Decimal("0.00")
+
     context = {
         "profile": profile,
         "profile_created": profile_created,
+        "recent_orders": recent_orders,
+        "order_count": user_orders.count(),
+        "total_spent": total_spent,
     }
 
     return render(

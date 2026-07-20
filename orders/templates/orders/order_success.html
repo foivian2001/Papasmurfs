@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Order Completed | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="order-section">
+        <div class="container">
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="order-success-card">
+                <div class="order-success-icon">
+                    ✓
+                </div>
+
+                <p class="section-label">
+                    Purchase completed
+                </p>
+
+                <h1>Thank you for your order</h1>
+
+                <p>
+                    Your simulated order has been stored successfully.
+                    No real payment was processed.
+                </p>
+
+                <div class="order-number">
+                    Order #{{ order.id }}
+                </div>
+
+                <div class="order-success-summary">
+                    <span>Total services</span>
+                    <strong>{{ order.total_items }}</strong>
+
+                    <span>Total price</span>
+                    <strong>€{{ order.total_price }}</strong>
+
+                    <span>Status</span>
+                    <strong>{{ order.get_status_display }}</strong>
+
+                    <span>Created</span>
+                    <strong>
+                        {{ order.created_at|date:"d F Y, H:i" }}
+                    </strong>
+                </div>
+
+                <div class="form-actions justify-content-center">
+                    <a
+                        class="btn btn-boost"
+                        href="{% url 'orders:detail' order.id %}"
+                    >
+                        View order
+                    </a>
+
+                    <a
+                        class="btn btn-outline-light"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+                        Continue browsing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

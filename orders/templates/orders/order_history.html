@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Order History | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="order-section">
+        <div class="container">
+            <div class="order-page-heading">
+                <div>
+                    <p class="section-label">
+                        Member activity
+                    </p>
+
+                    <h1>Order history</h1>
+
+                    <p>
+                        Review all completed simulated purchases
+                        connected to your account.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'dashboard:home' %}"
+                >
+                    Back to dashboard
+                </a>
+            </div>
+
+            {% if orders %}
+                <div class="order-history-list">
+                    {% for order in orders %}
+                        <article class="order-history-card">
+                            <div>
+                                <p class="section-label">
+                                    Order #{{ order.id }}
+                                </p>
+
+                                <h2>
+                                    {{ order.total_items }}
+                                    service{{ order.total_items|pluralize }}
+                                </h2>
+
+                                <p>
+                                    {{ order.created_at|date:"d F Y, H:i" }}
+                                </p>
+                            </div>
+
+                            <div class="order-history-meta">
+                                <span class="status-badge status-active">
+                                    {{ order.get_status_display }}
+                                </span>
+
+                                <strong>€{{ order.total_price }}</strong>
+
+                                <a
+                                    class="btn btn-outline-light"
+                                    href="{% url 'orders:detail' order.id %}"
+                                >
+                                    View details
+                                </a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-cart-card">
+                    <h2>No orders yet</h2>
+
+                    <p>
+                        Your completed purchases will appear here.
+                    </p>
+
+                    <a
+                        class="btn btn-boost"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+                        Browse packages
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

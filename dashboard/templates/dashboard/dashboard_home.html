@@ -35,7 +35,7 @@
                     </h1>
 
                     <p>
-                        Review your profile and access your personal
+                        Review your profile, orders and personal
                         Papasmurfs activity.
                     </p>
                 </div>
@@ -105,22 +105,70 @@
 
                 <div class="col-12 col-lg-8">
                     <div class="row g-4">
-                        <div class="col-12 col-md-6">
-                            <article class="dashboard-activity-card h-100">
-                                <p class="section-label">
-                                    Orders
-                                </p>
+                        <div class="col-12">
+                            <article class="dashboard-activity-card">
+                                <div class="dashboard-card-heading">
+                                    <div>
+                                        <p class="section-label">
+                                            Orders
+                                        </p>
 
-                                <h2>Purchase history</h2>
+                                        <h2>Purchase history</h2>
+                                    </div>
 
-                                <p>
-                                    Completed and active orders will appear
-                                    here after the checkout system is added.
-                                </p>
+                                    <a
+                                        class="btn btn-outline-light"
+                                        href="{% url 'orders:history' %}"
+                                    >
+                                        View all orders
+                                    </a>
+                                </div>
 
-                                <span class="status-badge status-inactive">
-                                    Coming later
-                                </span>
+                                <div class="dashboard-order-stats">
+                                    <div>
+                                        <span>Completed orders</span>
+                                        <strong>{{ order_count }}</strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Total spent</span>
+                                        <strong>€{{ total_spent }}</strong>
+                                    </div>
+                                </div>
+
+                                {% if recent_orders %}
+                                    <div class="dashboard-order-list">
+                                        {% for order in recent_orders %}
+                                            <a
+                                                class="dashboard-order-row"
+                                                href="{% url 'orders:detail' order.id %}"
+                                            >
+                                                <span>
+                                                    Order #{{ order.id }}
+                                                </span>
+
+                                                <span>
+                                                    {{ order.created_at|date:"d M Y" }}
+                                                </span>
+
+                                                <strong>
+                                                    €{{ order.total_price }}
+                                                </strong>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p>
+                                        You have not completed any orders yet.
+                                    </p>
+
+                                    <a
+                                        class="btn btn-outline-light"
+                                        href="{% url 'catalogue:package_list' %}"
+                                    >
+                                        Browse packages
+                                    </a>
+                                {% endif %}
                             </article>
                         </div>
 
@@ -152,8 +200,8 @@
                                 <h2>Suggested services</h2>
 
                                 <p>
-                                    Personalised recommendations will use
-                                    your searches and preferred game.
+                                    Recommendations will use your searches
+                                    and preferred game.
                                 </p>
 
                                 {% if profile.preferred_game %}
@@ -174,8 +222,8 @@
                             </article>
                         </div>
 
-                        <div class="col-12 col-md-6">
-                            <article class="dashboard-activity-card h-100">
+                        <div class="col-12">
+                            <article class="dashboard-activity-card">
                                 <p class="section-label">
                                     Account
                                 </p>
@@ -191,13 +239,6 @@
                                     Last updated:
                                     {{ profile.updated_at|date:"d F Y, H:i" }}
                                 </p>
-
-                                <a
-                                    class="btn btn-outline-light"
-                                    href="{% url 'dashboard:edit_profile' %}"
-                                >
-                                    Update details
-                                </a>
                             </article>
                         </div>
                     </div>

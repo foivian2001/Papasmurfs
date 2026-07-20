@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Checkout | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="order-section">
+        <div class="container">
+            <div class="order-page-heading">
+                <div>
+                    <p class="section-label">
+                        Simulated purchase
+                    </p>
+
+                    <h1>Confirm your order</h1>
+
+                    <p>
+                        Review the selected services before completing
+                        the simulated checkout.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'cart:detail' %}"
+                >
+                    Back to cart
+                </a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-8">
+                    <div class="order-items-card">
+                        {% for item in cart_items %}
+                            <article class="order-item-row">
+                                <div>
+                                    <span class="game-badge">
+                                        {{ item.package.category.game.name }}
+                                    </span>
+
+                                    <h2>{{ item.package.name }}</h2>
+
+                                    <p>
+                                        {{ item.package.current_rank.name }}
+                                        →
+                                        {{ item.package.target_rank.name }}
+                                    </p>
+
+                                    <p>
+                                        Quantity: {{ item.quantity }}
+                                    </p>
+                                </div>
+
+                                <div class="order-item-price">
+                                    <span>
+                                        €{{ item.package.price }} each
+                                    </span>
+
+                                    <strong>
+                                        €{{ item.subtotal }}
+                                    </strong>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <aside class="order-summary-card">
+                        <p class="section-label">
+                            Order summary
+                        </p>
+
+                        <h2>Final total</h2>
+
+                        <div class="summary-row">
+                            <span>Items</span>
+                            <strong>{{ cart.total_items }}</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Additional charges</span>
+                            <strong>€0.00</strong>
+                        </div>
+
+                        <div class="summary-row cart-total-row">
+                            <span>Total</span>
+                            <strong>€{{ total_price }}</strong>
+                        </div>
+
+                        <form
+                            method="post"
+                            action="{% url 'orders:place_order' %}"
+                        >
+                            {% csrf_token %}
+
+                            <button
+                                class="btn btn-boost w-100"
+                                type="submit"
+                            >
+                                Complete simulated purchase
+                            </button>
+                        </form>
+
+                        <p class="cart-summary-note">
+                            This is a demonstration checkout. No real
+                            payment or financial transaction occurs.
+                        </p>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

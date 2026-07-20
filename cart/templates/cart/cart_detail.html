@@ -175,13 +175,12 @@
                                 <strong>€{{ cart.total_price }}</strong>
                             </div>
 
-                            <button
+                            <a
                                 class="btn btn-boost w-100"
-                                type="button"
-                                disabled
+                                href="{% url 'orders:checkout' %}"
                             >
-                                Checkout coming next
-                            </button>
+                                Continue to checkout
+                            </a>
 
                             <p class="cart-summary-note">
                                 No real payment will be processed.

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "searchapp",
     "dashboard",
     "cart",
+    "orders.apps.OrdersConfig",
 ]
 
 MIDDLEWARE = [

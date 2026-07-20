@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Order #{{ order.id }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="order-section">
+        <div class="container">
+            <div class="order-page-heading">
+                <div>
+                    <p class="section-label">
+                        Purchase details
+                    </p>
+
+                    <h1>Order #{{ order.id }}</h1>
+
+                    <p>
+                        Created:
+                        {{ order.created_at|date:"d F Y, H:i" }}
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'orders:history' %}"
+                >
+                    All orders
+                </a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-8">
+                    <div class="order-items-card">
+                        {% for item in order.items.all %}
+                            <article class="order-item-row">
+                                <div>
+                                    <span class="game-badge">
+                                        {{ item.game_name }}
+                                    </span>
+
+                                    <h2>{{ item.package_name }}</h2>
+
+                                    <p>
+                                        {{ item.current_rank_name }}
+                                        →
+                                        {{ item.target_rank_name }}
+                                    </p>
+
+                                    <p>
+                                        Category: {{ item.category_name }}
+                                    </p>
+
+                                    <p>
+                                        Quantity: {{ item.quantity }}
+                                    </p>
+                                </div>
+
+                                <div class="order-item-price">
+                                    <span>
+                                        €{{ item.unit_price }} each
+                                    </span>
+
+                                    <strong>
+                                        €{{ item.subtotal }}
+                                    </strong>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <aside class="order-summary-card">
+                        <p class="section-label">
+                            Order summary
+                        </p>
+
+                        <h2>Order #{{ order.id }}</h2>
+
+                        <div class="summary-row">
+                            <span>Status</span>
+                            <strong>
+                                {{ order.get_status_display }}
+                            </strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Total services</span>
+                            <strong>{{ order.total_items }}</strong>
+                        </div>
+
+                        <div class="summary-row cart-total-row">
+                            <span>Total price</span>
+                            <strong>€{{ order.total_price }}</strong>
+                        </div>
+
+                        <a
+                            class="btn btn-boost w-100"
+                            href="{% url 'catalogue:package_list' %}"
+                        >
+                            Browse more services
+                        </a>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
