@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Recommended for You | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="recommendations-section">
+        <div class="container">
+            <div class="recommendations-heading">
+                <div>
+                    <p class="section-label">
+                        Personalised services
+                    </p>
+
+                    <h1>Recommended for you</h1>
+
+                    <p>
+                        These suggestions are ranked using your recent
+                        searches and preferred game.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'search:package_search' %}"
+                >
+                    Search services
+                </a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-xl-9">
+                    <div class="row g-4">
+                        {% for recommendation in recommendations %}
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="package-card h-100">
+                                    <div class="package-card-top">
+                                        <span class="game-badge">
+                                            {{ recommendation.package.category.game.name }}
+                                        </span>
+
+                                        {% if recommendation.package.is_featured %}
+                                            <span class="featured-badge">
+                                                Featured
+                                            </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <h2>
+                                        {{ recommendation.package.name }}
+                                    </h2>
+
+                                    <p class="recommendation-reason">
+                                        {{ recommendation.reason }}
+                                    </p>
+
+                                    <div class="rank-route">
+                                        <span>
+                                            {{ recommendation.package.current_rank.name }}
+                                        </span>
+
+                                        <strong>→</strong>
+
+                                        <span>
+                                            {{ recommendation.package.target_rank.name }}
+                                        </span>
+                                    </div>
+
+                                    <div class="package-information">
+                                        <p>
+                                            <strong>Category:</strong>
+                                            {{ recommendation.package.category.name }}
+                                        </p>
+
+                                        <p>
+                                            <strong>Completion:</strong>
+                                            {{ recommendation.package.estimated_days }}
+                                            day{{ recommendation.package.estimated_days|pluralize }}
+                                        </p>
+                                    </div>
+
+                                    <div class="package-card-bottom">
+                                        <p class="package-price">
+                                            €{{ recommendation.package.price }}
+                                        </p>
+
+                                        <a
+                                            class="btn btn-boost"
+                                            href="{% url 'catalogue:package_detail' recommendation.package.id %}"
+                                        >
+                                            View package
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        {% empty %}
+                            <div class="col-12">
+                                <div class="empty-cart-card">
+                                    <h2>No recommendations available</h2>
+
+                                    <p>
+                                        Search for some services first so
+                                        Papasmurfs can learn your interests.
+                                    </p>
+
+                                    <a
+                                        class="btn btn-boost"
+                                        href="{% url 'search:package_search' %}"
+                                    >
+                                        Start searching
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-3">
+                    <aside class="recent-searches-card">
+                        <p class="section-label">
+                            Recommendation data
+                        </p>
+
+                        <h2>Recent searches</h2>
+
+                        {% if recent_searches %}
+                            <div class="recent-search-list">
+                                {% for search in recent_searches %}
+                                    <article class="recent-search-item">
+                                        {% if search.query %}
+                                            <strong>
+                                                “{{ search.query }}”
+                                            </strong>
+                                        {% elif search.game %}
+                                            <strong>
+                                                {{ search.game.name }}
+                                            </strong>
+                                        {% elif search.category %}
+                                            <strong>
+                                                {{ search.category.name }}
+                                            </strong>
+                                        {% else %}
+                                            <strong>
+                                                Filtered search
+                                            </strong>
+                                        {% endif %}
+
+                                        {% if search.game %}
+                                            <span>
+                                                Game: {{ search.game.name }}
+                                            </span>
+                                        {% endif %}
+
+                                        {% if search.maximum_price %}
+                                            <span>
+                                                Up to €{{ search.maximum_price }}
+                                            </span>
+                                        {% endif %}
+
+                                        <span>
+                                            {{ search.created_at|date:"d M Y, H:i" }}
+                                        </span>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>
+                                No searches have been saved yet.
+                            </p>
+                        {% endif %}
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

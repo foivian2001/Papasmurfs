@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render
 
 from catalogue.models import BoostPackage
+from recommendations.services import record_search
 
 from .forms import PackageSearchForm
 
@@ -35,6 +36,12 @@ def package_search(request):
         maximum_price = form.cleaned_data.get("maximum_price")
         maximum_days = form.cleaned_data.get("maximum_days")
         featured_only = form.cleaned_data.get("featured_only")
+
+        if request.GET:
+            record_search(
+                request.user,
+                form.cleaned_data,
+            )
 
         if query:
             packages = packages.filter(

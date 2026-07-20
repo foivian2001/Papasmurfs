@@ -6,6 +6,7 @@ from django.db.models import Sum
 from django.shortcuts import redirect, render
 
 from orders.models import Order
+from recommendations.services import get_recommended_packages
 
 from .forms import UserAccountForm, UserProfileForm
 from .models import UserProfile
@@ -35,12 +36,18 @@ def dashboard_home(request):
         total=Sum("total_price"),
     )["total"] or Decimal("0.00")
 
+    recommended_packages = get_recommended_packages(
+        request.user,
+        limit=3,
+    )
+
     context = {
         "profile": profile,
         "profile_created": profile_created,
         "recent_orders": recent_orders,
         "order_count": user_orders.count(),
         "total_spent": total_spent,
+        "recommended_packages": recommended_packages,
     }
 
     return render(

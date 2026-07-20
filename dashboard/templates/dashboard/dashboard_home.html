@@ -35,8 +35,8 @@
                     </h1>
 
                     <p>
-                        Review your profile, orders and personal
-                        Papasmurfs activity.
+                        Review your profile, orders, ratings and
+                        personalised Papasmurfs recommendations.
                     </p>
                 </div>
 
@@ -181,42 +181,74 @@
                                 <h2>Your ratings</h2>
 
                                 <p>
-                                    Your package ratings and reviews will
-                                    be displayed here.
+                                    Ratings and written reviews you submit
+                                    will be connected to your account.
                                 </p>
 
-                                <span class="status-badge status-inactive">
-                                    Coming later
-                                </span>
+                                <a
+                                    class="btn btn-outline-light"
+                                    href="{% url 'catalogue:package_list' %}"
+                                >
+                                    Browse packages
+                                </a>
                             </article>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <article class="dashboard-activity-card h-100">
-                                <p class="section-label">
-                                    Recommendations
-                                </p>
+                                <div class="dashboard-card-heading">
+                                    <div>
+                                        <p class="section-label">
+                                            Recommendations
+                                        </p>
 
-                                <h2>Suggested services</h2>
+                                        <h2>Suggested services</h2>
+                                    </div>
 
-                                <p>
-                                    Recommendations will use your searches
-                                    and preferred game.
-                                </p>
-
-                                {% if profile.preferred_game %}
                                     <a
                                         class="btn btn-outline-light"
-                                        href="{% url 'search:package_search' %}?game={{ profile.preferred_game.id }}"
+                                        href="{% url 'recommendations:list' %}"
                                     >
-                                        Browse {{ profile.preferred_game.name }}
+                                        View all
                                     </a>
+                                </div>
+
+                                {% if recommended_packages %}
+                                    <div class="dashboard-recommendation-list">
+                                        {% for recommendation in recommended_packages %}
+                                            <a
+                                                class="dashboard-recommendation-row"
+                                                href="{% url 'catalogue:package_detail' recommendation.package.id %}"
+                                            >
+                                                <span>
+                                                    {{ recommendation.package.category.game.name }}
+                                                </span>
+
+                                                <strong>
+                                                    {{ recommendation.package.name }}
+                                                </strong>
+
+                                                <small>
+                                                    {{ recommendation.reason }}
+                                                </small>
+
+                                                <b>
+                                                    €{{ recommendation.package.price }}
+                                                </b>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
                                 {% else %}
+                                    <p>
+                                        Search for services to receive
+                                        personalised package suggestions.
+                                    </p>
+
                                     <a
                                         class="btn btn-outline-light"
                                         href="{% url 'search:package_search' %}"
                                     >
-                                        Browse services
+                                        Search services
                                     </a>
                                 {% endif %}
                             </article>
@@ -224,11 +256,22 @@
 
                         <div class="col-12">
                             <article class="dashboard-activity-card">
-                                <p class="section-label">
-                                    Account
-                                </p>
+                                <div class="dashboard-card-heading">
+                                    <div>
+                                        <p class="section-label">
+                                            Account
+                                        </p>
 
-                                <h2>Member information</h2>
+                                        <h2>Member information</h2>
+                                    </div>
+
+                                    <a
+                                        class="btn btn-outline-light"
+                                        href="{% url 'dashboard:edit_profile' %}"
+                                    >
+                                        Update details
+                                    </a>
+                                </div>
 
                                 <p>
                                     Joined:

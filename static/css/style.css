@@ -1632,3 +1632,117 @@ body {
         font-size: 2.1rem;
     }
 }
+
+.recommendations-section {
+    min-height: calc(100vh - 70px);
+    padding: 4rem 1rem;
+}
+
+.recommendations-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.recommendations-heading h1 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 900;
+}
+
+.recommendations-heading p:last-child {
+    max-width: 680px;
+    color: #b9c3cf;
+}
+
+.recommendation-reason {
+    min-height: 48px;
+    color: var(--papasmurfs-cyan);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.recent-searches-card {
+    position: sticky;
+    top: 100px;
+    padding: 1.5rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+}
+
+.recent-searches-card h2 {
+    font-size: 1.35rem;
+    font-weight: 900;
+}
+
+.recent-searches-card > p:last-child {
+    color: #b9c3cf;
+}
+
+.recent-search-list {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.recent-search-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.9rem;
+    border: 1px solid #354255;
+    border-radius: 0.75rem;
+    background-color: #0b1119;
+}
+
+.recent-search-item strong {
+    color: var(--papasmurfs-cyan);
+}
+
+.recent-search-item span {
+    color: #b9c3cf;
+    font-size: 0.8rem;
+}
+
+.dashboard-recommendation-list {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.dashboard-recommendation-row {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.9rem;
+    border: 1px solid #354255;
+    border-radius: 0.75rem;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.dashboard-recommendation-row:hover {
+    border-color: var(--papasmurfs-cyan);
+    color: #ffffff;
+}
+
+.dashboard-recommendation-row span,
+.dashboard-recommendation-row small {
+    color: #b9c3cf;
+}
+
+.dashboard-recommendation-row b {
+    color: var(--papasmurfs-cyan);
+}
+
+@media (max-width: 767px) {
+    .recommendations-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .recent-searches-card {
+        position: static;
+    }
+}

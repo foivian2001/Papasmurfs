@@ -34,6 +34,10 @@ urlpatterns = [
         include("ratings.urls"),
     ),
     path(
+        "recommendations/",
+        include("recommendations.urls"),
+    ),
+    path(
         "search/",
         include("searchapp.urls"),
     ),
