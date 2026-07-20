@@ -174,23 +174,60 @@
 
                         <div class="col-12 col-md-6">
                             <article class="dashboard-activity-card h-100">
-                                <p class="section-label">
-                                    Reviews
-                                </p>
+                                <div class="dashboard-card-heading">
+                                    <div>
+                                        <p class="section-label">
+                                            Reviews
+                                        </p>
 
-                                <h2>Your ratings</h2>
+                                        <h2>Your ratings</h2>
+                                    </div>
 
-                                <p>
-                                    Ratings and written reviews you submit
-                                    will be connected to your account.
-                                </p>
+                                    <a
+                                        class="btn btn-outline-light"
+                                        href="{% url 'catalogue:package_list' %}"
+                                    >
+                                        Browse packages
+                                    </a>
+                                </div>
 
-                                <a
-                                    class="btn btn-outline-light"
-                                    href="{% url 'catalogue:package_list' %}"
-                                >
-                                    Browse packages
-                                </a>
+                                {% if recent_reviews %}
+                                    <div class="dashboard-review-list">
+                                        {% for review in recent_reviews %}
+                                            <a
+                                                class="dashboard-review-row"
+                                                href="{% url 'catalogue:package_detail' review.package.id %}"
+                                            >
+                                                <span>
+                                                    {{ review.package.name }}
+                                                </span>
+
+                                                <strong>
+                                                    {{ review.rating }}/5
+                                                </strong>
+
+                                                {% if review.review_text %}
+                                                    <p>
+                                                        {{ review.review_text|truncatechars:90 }}
+                                                    </p>
+                                                {% else %}
+                                                    <p>
+                                                        No written review was added.
+                                                    </p>
+                                                {% endif %}
+
+                                                <small>
+                                                    Updated
+                                                    {{ review.updated_at|date:"d M Y" }}
+                                                </small>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p>
+                                        You have not submitted any ratings yet.
+                                    </p>
+                                {% endif %}
                             </article>
                         </div>
 

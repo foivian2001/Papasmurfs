@@ -6,6 +6,7 @@ from django.db.models import Sum
 from django.shortcuts import redirect, render
 
 from orders.models import Order
+from ratings.models import PackageReview
 from recommendations.services import get_recommended_packages
 
 from .forms import UserAccountForm, UserProfileForm
@@ -41,6 +42,13 @@ def dashboard_home(request):
         limit=3,
     )
 
+    recent_reviews = (
+        PackageReview.objects
+        .filter(user=request.user)
+        .select_related("package")
+        .order_by("-updated_at")[:3]
+    )
+
     context = {
         "profile": profile,
         "profile_created": profile_created,
@@ -48,6 +56,7 @@ def dashboard_home(request):
         "order_count": user_orders.count(),
         "total_spent": total_spent,
         "recommended_packages": recommended_packages,
+        "recent_reviews": recent_reviews,
     }
 
     return render(
