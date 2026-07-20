@@ -1,0 +1,600 @@
+[
+{
+  "model": "catalogue.game",
+  "pk": 1,
+  "fields": {
+    "name": "League of Legends",
+    "description": "League of Legends is a fast-paced, team-based strategy game where two teams of five powerful champions face off to destroy each other's base. Players choose from a diverse roster of over 170 champions to make epic plays, secure objectives, and battle their way to victory on the iconic map, Summoner's Rift",
+    "image": "games/LOL.jpg",
+    "is_active": true
+  }
+},
+{
+  "model": "catalogue.game",
+  "pk": 2,
+  "fields": {
+    "name": "GTA Online",
+    "description": "GTA Online is a story-driven, open-world multiplayer action game where players create a unique criminal avatar and build an underworld empire in the fictional city of Los Santos and Blaine County. Accessible through Grand Theft Auto V or as a standalone title, it blends massive cooperative heists, competitive racing, dynamic freemode activities and much more.",
+    "image": "games/gtaonlinelogopic.png",
+    "is_active": false
+  }
+},
+{
+  "model": "catalogue.game",
+  "pk": 3,
+  "fields": {
+    "name": "Counter-Strike 2",
+    "description": "Counter-Strike 2 (CS2) is a free-to-play, first-person shooter and the technical successor to Counter-Strike: Global Offensive. Built on Valve's Source 2 engine, it features upgraded graphics, reactive volumetric smoke grenades, and \"sub-tick\" server architecture for hyper-responsive gameplay. It retains the classic objective-based team combat.",
+    "image": "games/csgo2pic.jpg",
+    "is_active": false
+  }
+},
+{
+  "model": "catalogue.game",
+  "pk": 4,
+  "fields": {
+    "name": "Fortnite",
+    "description": "Fortnite is a massively popular free-to-play online video game released by Epic Games in 2017. It has evolved from a single battle royale shooter into a massive digital entertainment platform featuring multiple modes, including a 100-player survival competition, co-op tower defense, creator-made islands, rhythm games, and racing",
+    "image": "games/Fortnite_F_lettermark_logo.png",
+    "is_active": false
+  }
+},
+{
+  "model": "catalogue.servicecategory",
+  "pk": 1,
+  "fields": {
+    "game": 1,
+    "name": "Solo/Duo Boost",
+    "description": "Rank boosting service for the League of Legends Solo/Duo ranked queue."
+  }
+},
+{
+  "model": "catalogue.servicecategory",
+  "pk": 2,
+  "fields": {
+    "game": 2,
+    "name": "RP / Level Boosting",
+    "description": "Increase your GTA Online level by earning RP faster, unlocking new features, weapons, missions, and gameplay rewards along the way."
+  }
+},
+{
+  "model": "catalogue.servicecategory",
+  "pk": 3,
+  "fields": {
+    "game": 3,
+    "name": "Competitive Rank Boost",
+    "description": "Advance through Counter-Strike’s competitive ranks with a tailored boost based on your current skill group and desired target rank."
+  }
+},
+{
+  "model": "catalogue.servicecategory",
+  "pk": 4,
+  "fields": {
+    "game": 4,
+    "name": "Ranked Battle Royal Boost",
+    "description": "Climb the Fortnite Ranked Battle Royale ladder through placement-focused matches, eliminations and consistent progression toward your selected target rank."
+  }
+},
+{
+  "model": "catalogue.servicecategory",
+  "pk": 5,
+  "fields": {
+    "game": 4,
+    "name": "Ranked Zero Build Boost",
+    "description": "Advance through Fortnite Zero Build Ranked with progression focused on positioning, eliminations and survival without the use of building mechanics."
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 1,
+  "fields": {
+    "game": 1,
+    "name": "Iron",
+    "rank_order": 1
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 2,
+  "fields": {
+    "game": 1,
+    "name": "Bronze",
+    "rank_order": 2
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 3,
+  "fields": {
+    "game": 1,
+    "name": "Silver",
+    "rank_order": 3
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 4,
+  "fields": {
+    "game": 1,
+    "name": "Gold",
+    "rank_order": 4
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 5,
+  "fields": {
+    "game": 1,
+    "name": "Platinum",
+    "rank_order": 5
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 6,
+  "fields": {
+    "game": 1,
+    "name": "Emerald",
+    "rank_order": 6
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 7,
+  "fields": {
+    "game": 1,
+    "name": "Diamond",
+    "rank_order": 7
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 8,
+  "fields": {
+    "game": 1,
+    "name": "Master",
+    "rank_order": 8
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 9,
+  "fields": {
+    "game": 1,
+    "name": "Grand Master",
+    "rank_order": 9
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 10,
+  "fields": {
+    "game": 2,
+    "name": "Thug Level 1-10",
+    "rank_order": 1
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 11,
+  "fields": {
+    "game": 2,
+    "name": "Hustler Level 11-20",
+    "rank_order": 2
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 12,
+  "fields": {
+    "game": 2,
+    "name": "Solder Level 21-30",
+    "rank_order": 3
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 13,
+  "fields": {
+    "game": 2,
+    "name": "Trigger Level 31-40",
+    "rank_order": 4
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 14,
+  "fields": {
+    "game": 2,
+    "name": "Enforcer 41-50",
+    "rank_order": 5
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 15,
+  "fields": {
+    "game": 2,
+    "name": "Facilitator Level 51-60",
+    "rank_order": 6
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 16,
+  "fields": {
+    "game": 2,
+    "name": "Public Enemy Level 61-70",
+    "rank_order": 7
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 17,
+  "fields": {
+    "game": 2,
+    "name": "Shot Caller Level 71 - 80",
+    "rank_order": 8
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 18,
+  "fields": {
+    "game": 2,
+    "name": "Street Boss Level 81 - 90",
+    "rank_order": 9
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 19,
+  "fields": {
+    "game": 2,
+    "name": "Kingpin Rank Level 91 - 100+",
+    "rank_order": 10
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 20,
+  "fields": {
+    "game": 3,
+    "name": "Silver 1",
+    "rank_order": 1
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 21,
+  "fields": {
+    "game": 3,
+    "name": "Silver 2",
+    "rank_order": 2
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 22,
+  "fields": {
+    "game": 3,
+    "name": "Silver 3",
+    "rank_order": 3
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 23,
+  "fields": {
+    "game": 3,
+    "name": "Silver 4",
+    "rank_order": 4
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 24,
+  "fields": {
+    "game": 3,
+    "name": "Silver Elite",
+    "rank_order": 5
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 25,
+  "fields": {
+    "game": 3,
+    "name": "Silver Elite Master",
+    "rank_order": 6
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 26,
+  "fields": {
+    "game": 3,
+    "name": "Gold Nova",
+    "rank_order": 7
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 27,
+  "fields": {
+    "game": 3,
+    "name": "Gold Nova 2",
+    "rank_order": 8
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 28,
+  "fields": {
+    "game": 3,
+    "name": "Gold Nova 3",
+    "rank_order": 9
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 29,
+  "fields": {
+    "game": 3,
+    "name": "Gold Nova Master",
+    "rank_order": 10
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 30,
+  "fields": {
+    "game": 3,
+    "name": "Master Guardian 1",
+    "rank_order": 11
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 31,
+  "fields": {
+    "game": 3,
+    "name": "Master Guardian 2",
+    "rank_order": 12
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 32,
+  "fields": {
+    "game": 3,
+    "name": "Master Guardian Elite",
+    "rank_order": 13
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 33,
+  "fields": {
+    "game": 3,
+    "name": "Distinguished Master Guardian",
+    "rank_order": 14
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 34,
+  "fields": {
+    "game": 3,
+    "name": "Legendary Eagle",
+    "rank_order": 15
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 35,
+  "fields": {
+    "game": 3,
+    "name": "Legendary Eagle Master",
+    "rank_order": 16
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 36,
+  "fields": {
+    "game": 3,
+    "name": "Supreme Master First Class",
+    "rank_order": 17
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 37,
+  "fields": {
+    "game": 3,
+    "name": "Global Elite",
+    "rank_order": 18
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 38,
+  "fields": {
+    "game": 4,
+    "name": "Bronze 1",
+    "rank_order": 1
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 39,
+  "fields": {
+    "game": 4,
+    "name": "Bronze 2",
+    "rank_order": 2
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 40,
+  "fields": {
+    "game": 4,
+    "name": "Bronze 3",
+    "rank_order": 3
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 41,
+  "fields": {
+    "game": 4,
+    "name": "Silver 1",
+    "rank_order": 4
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 42,
+  "fields": {
+    "game": 4,
+    "name": "Silver 2",
+    "rank_order": 5
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 43,
+  "fields": {
+    "game": 4,
+    "name": "Silver 3",
+    "rank_order": 6
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 44,
+  "fields": {
+    "game": 4,
+    "name": "Gold 1",
+    "rank_order": 7
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 45,
+  "fields": {
+    "game": 4,
+    "name": "Gold 2",
+    "rank_order": 8
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 46,
+  "fields": {
+    "game": 4,
+    "name": "Gold 3",
+    "rank_order": 9
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 47,
+  "fields": {
+    "game": 4,
+    "name": "Platinum 1",
+    "rank_order": 10
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 48,
+  "fields": {
+    "game": 4,
+    "name": "Platinum 2",
+    "rank_order": 11
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 49,
+  "fields": {
+    "game": 4,
+    "name": "Platinum 3",
+    "rank_order": 12
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 50,
+  "fields": {
+    "game": 4,
+    "name": "Diamond 1",
+    "rank_order": 13
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 51,
+  "fields": {
+    "game": 4,
+    "name": "Diamond 2",
+    "rank_order": 14
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 52,
+  "fields": {
+    "game": 4,
+    "name": "Diamond 3",
+    "rank_order": 15
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 53,
+  "fields": {
+    "game": 4,
+    "name": "Elite",
+    "rank_order": 16
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 54,
+  "fields": {
+    "game": 4,
+    "name": "Champion",
+    "rank_order": 17
+  }
+},
+{
+  "model": "catalogue.rank",
+  "pk": 55,
+  "fields": {
+    "game": 4,
+    "name": "Unreal",
+    "rank_order": 18
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "current_rank": 1,
+    "target_rank": 2,
+    "name": "Iron to Bronze",
+    "description": "A complete League of Legends Solo/Duo rank boost from Silver to Gold, handled by an experienced booster with progress tracked throughout the service.",
+    "price": "20.00",
+    "estimated_days": 2,
+    "image": "packages/LOL.jpg",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-14T15:10:23.689Z",
+    "updated_at": "2026-07-14T15:13:04.958Z"
+  }
+}
+]
