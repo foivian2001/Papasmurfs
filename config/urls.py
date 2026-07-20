@@ -14,6 +14,10 @@ urlpatterns = [
         include("controlpanel.urls"),
     ),
     path(
+        "user-management/",
+        include("usermanagement.urls"),
+    ),
+    path(
         "account/",
         include("accounts.urls"),
     ),

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete {{ managed_user.username }} | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="delete-confirmation-card">
+                <p class="section-label">
+                    Confirm account deletion
+                </p>
+
+                <h1>
+                    Delete {{ managed_user.username }}?
+                </h1>
+
+                <p>
+                    This will permanently delete the user account and
+                    information connected to it, including profile data,
+                    shopping-cart items, ratings and order history.
+                </p>
+
+                <div class="managed-user-summary">
+                    <div>
+                        <span>Username</span>
+                        <strong>{{ managed_user.username }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Email</span>
+                        <strong>
+                            {% if managed_user.email %}
+                                {{ managed_user.email }}
+                            {% else %}
+                                No email address
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Joined</span>
+                        <strong>
+                            {{ managed_user.date_joined|date:"d F Y" }}
+                        </strong>
+                    </div>
+                </div>
+
+                <p class="delete-warning">
+                    This action cannot be undone.
+                </p>
+
+                <form
+                    method="post"
+                    action="{% url 'usermanagement:delete' managed_user.id %}"
+                >
+                    {% csrf_token %}
+
+                    <div class="form-actions">
+                        <button
+                            class="btn btn-danger"
+                            type="submit"
+                        >
+                            Permanently delete account
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'usermanagement:list' %}"
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -7,6 +7,16 @@
 {% block content %}
     <section class="control-panel-section">
         <div class="container">
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="control-panel-heading">
                 <div>
                     <p class="section-label">
@@ -16,8 +26,8 @@
                     <h1>Papasmurfs Control Panel</h1>
 
                     <p>
-                        Manage the catalogue, users and business activity
-                        from one protected area.
+                        Manage catalogue content, registered users and
+                        business activity from one protected area.
                     </p>
                 </div>
 
@@ -109,8 +119,8 @@
                     <h2>Boost packages</h2>
 
                     <p>
-                        Manage package prices, rank routes,
-                        completion estimates, images and availability.
+                        Manage prices, rank routes, completion estimates,
+                        images and service availability.
                     </p>
 
                     <a
@@ -125,17 +135,16 @@
                     <h2>Users</h2>
 
                     <p>
-                        Review registered users and manage their
-                        assigned roles.
+                        Review registered users, account status and
+                        assigned staff permissions.
                     </p>
 
-                    <button
+                    <a
                         class="btn btn-boost"
-                        type="button"
-                        disabled
+                        href="{% url 'usermanagement:list' %}"
                     >
-                        Management coming later
-                    </button>
+                        Manage users
+                    </a>
                 </article>
             </div>
         </div>

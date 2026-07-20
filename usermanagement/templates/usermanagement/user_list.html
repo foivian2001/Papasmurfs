@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Manage Users | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="management-page-heading">
+                <div>
+                    <p class="section-label">
+                        Account administration
+                    </p>
+
+                    <h1>Manage Users</h1>
+
+                    <p>
+                        Review registered accounts, update user details,
+                        and control staff or account access.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'controlpanel:dashboard' %}"
+                >
+                    Back to Control Panel
+                </a>
+            </div>
+
+            <form
+                class="user-search-form"
+                method="get"
+                action="{% url 'usermanagement:list' %}"
+            >
+                <div class="user-search-input">
+                    <label
+                        class="form-label"
+                        for="user-search"
+                    >
+                        Search users
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="user-search"
+                        name="query"
+                        type="search"
+                        value="{{ search_query }}"
+                        placeholder="Search username, name or email..."
+                    >
+                </div>
+
+                <div class="user-search-actions">
+                    <button
+                        class="btn btn-boost"
+                        type="submit"
+                    >
+                        Search
+                    </button>
+
+                    <a
+                        class="btn btn-outline-light"
+                        href="{% url 'usermanagement:list' %}"
+                    >
+                        Clear
+                    </a>
+                </div>
+            </form>
+
+            <div class="management-list-summary">
+                <p>
+                    <strong>{{ user_count }}</strong>
+                    user{{ user_count|pluralize }} found
+                </p>
+            </div>
+
+            <div class="management-table-wrapper">
+                <table class="management-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Contact</th>
+                            <th>Joined</th>
+                            <th>Role</th>
+                            <th>Account status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for managed_user in users %}
+                            <tr>
+                                <td>
+                                    <strong>
+                                        {{ managed_user.username }}
+                                    </strong>
+
+                                    {% if managed_user.first_name or managed_user.last_name %}
+                                        <p class="table-description">
+                                            {{ managed_user.first_name }}
+                                            {{ managed_user.last_name }}
+                                        </p>
+                                    {% else %}
+                                        <p class="table-description">
+                                            No full name provided
+                                        </p>
+                                    {% endif %}
+
+                                    {% if managed_user == user %}
+                                        <span class="current-user-badge">
+                                            Your account
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if managed_user.email %}
+                                        {{ managed_user.email }}
+                                    {% else %}
+                                        <span class="table-description">
+                                            No email address
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ managed_user.date_joined|date:"d M Y" }}
+                                </td>
+
+                                <td>
+                                    {% if managed_user.is_superuser %}
+                                        <span class="role-badge role-superuser">
+                                            Superuser
+                                        </span>
+                                    {% elif managed_user.is_staff %}
+                                        <span class="role-badge role-staff">
+                                            Staff
+                                        </span>
+                                    {% else %}
+                                        <span class="role-badge role-member">
+                                            Member
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if managed_user.is_active %}
+                                        <span class="status-badge status-active">
+                                            Active
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge status-inactive">
+                                            Inactive
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="table-actions">
+                                        <a
+                                            class="btn btn-sm btn-outline-light"
+                                            href="{% url 'usermanagement:update' managed_user.id %}"
+                                        >
+                                            Edit
+                                        </a>
+
+                                        {% if managed_user != user and not managed_user.is_superuser %}
+                                            <a
+                                                class="btn btn-sm btn-outline-danger"
+                                                href="{% url 'usermanagement:delete_confirmation' managed_user.id %}"
+                                            >
+                                                Delete
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td
+                                    class="empty-table"
+                                    colspan="6"
+                                >
+                                    No users matched your search.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

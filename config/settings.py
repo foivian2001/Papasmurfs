@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "orders.apps.OrdersConfig",
     "ratings",
     "recommendations",
+    "usermanagement",
 ]
 
 MIDDLEWARE = [
