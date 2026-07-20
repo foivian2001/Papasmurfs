@@ -27,18 +27,48 @@
 
             <article class="package-detail-grid">
                 <div>
-                    {% if package.image %}
+                    {% if package.category.game.name == "League of Legends" %}
                         <img
                             class="package-detail-image"
-                            src="{{ package.image.url }}"
-                            alt="{{ package.name }}"
+                            src="{% static 'images/games/league-of-legends.png' %}"
+                            alt="League of Legends"
                         >
-                    {% elif package.category.game.image %}
+
+                    {% elif package.category.game.name == "Counter-Strike 2" %}
                         <img
                             class="package-detail-image"
-                            src="{{ package.category.game.image.url }}"
-                            alt="{{ package.category.game.name }}"
+                            src="{% static 'images/games/counter-strike-2.png' %}"
+                            alt="Counter-Strike 2"
                         >
+
+                    {% elif package.category.game.name == "CS2" %}
+                        <img
+                            class="package-detail-image"
+                            src="{% static 'images/games/counter-strike-2.png' %}"
+                            alt="Counter-Strike 2"
+                        >
+
+                    {% elif package.category.game.name == "CS:GO / CS2" %}
+                        <img
+                            class="package-detail-image"
+                            src="{% static 'images/games/counter-strike-2.png' %}"
+                            alt="Counter-Strike 2"
+                        >
+
+                    {% elif package.category.game.name == "Fortnite" %}
+                        <img
+                            class="package-detail-image"
+                            src="{% static 'images/games/fortnite.png' %}"
+                            alt="Fortnite"
+                        >
+
+                    {% elif package.category.game.name == "GTA Online" %}
+                        <img
+                            class="package-detail-image"
+                            src="{% static 'images/games/gta-online.png' %}"
+                            alt="GTA Online"
+                        >
+
                     {% else %}
                         <div class="package-detail-image-placeholder">
                             {{ package.category.game.name }}
