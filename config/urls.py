@@ -30,6 +30,10 @@ urlpatterns = [
         include("orders.urls"),
     ),
     path(
+        "ratings/",
+        include("ratings.urls"),
+    ),
+    path(
         "search/",
         include("searchapp.urls"),
     ),

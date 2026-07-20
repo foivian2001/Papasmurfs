@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "dashboard",
     "cart",
     "orders.apps.OrdersConfig",
+    "ratings",
 ]
 
 MIDDLEWARE = [

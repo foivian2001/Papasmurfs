@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     {{ package.name }} | Papasmurfs
@@ -60,14 +61,42 @@
 
                     <h1>{{ package.name }}</h1>
 
+                    <div class="package-rating-summary">
+                        <span class="rating-stars">
+                            ★★★★★
+                        </span>
+
+                        <strong>
+                            <span id="average-rating">
+                                {{ average_rating|floatformat:1 }}
+                            </span>
+                            / 5
+                        </strong>
+
+                        <span>
+                            (
+                            <span id="review-count">
+                                {{ review_count }}
+                            </span>
+                            review{{ review_count|pluralize }}
+                            )
+                        </span>
+                    </div>
+
                     <p class="package-detail-description">
                         {{ package.description }}
                     </p>
 
                     <div class="rank-route">
-                        <span>{{ package.current_rank.name }}</span>
+                        <span>
+                            {{ package.current_rank.name }}
+                        </span>
+
                         <strong>→</strong>
-                        <span>{{ package.target_rank.name }}</span>
+
+                        <span>
+                            {{ package.target_rank.name }}
+                        </span>
                     </div>
 
                     <div class="package-detail-meta">
@@ -131,6 +160,213 @@
                     {% endif %}
                 </div>
             </article>
+
+            <section class="reviews-section">
+                <div class="reviews-heading">
+                    <div>
+                        <p class="section-label">
+                            Customer feedback
+                        </p>
+
+                        <h2>Ratings and reviews</h2>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-12 col-lg-5">
+                        {% if user.is_authenticated %}
+                            <div class="review-form-card">
+                                <p class="section-label">
+                                    Your review
+                                </p>
+
+                                <h2>
+                                    {% if user_review %}
+                                        Update your rating
+                                    {% else %}
+                                        Rate this package
+                                    {% endif %}
+                                </h2>
+
+                                <form
+                                    id="review-form"
+                                    method="post"
+                                    action="{% url 'ratings:submit_review' package.id %}"
+                                >
+                                    {% csrf_token %}
+
+                                    <input
+                                        id="rating-value"
+                                        name="rating"
+                                        type="hidden"
+                                        value="{% if user_review %}{{ user_review.rating }}{% endif %}"
+                                    >
+
+                                    <label class="form-label">
+                                        Select your rating
+                                    </label>
+
+                                    <div
+                                        class="star-selector"
+                                        id="star-selector"
+                                    >
+                                        <button
+                                            class="star-button {% if user_review and user_review.rating >= 1 %}selected{% endif %}"
+                                            type="button"
+                                            data-rating="1"
+                                            aria-label="1 star"
+                                        >
+                                            ★
+                                        </button>
+
+                                        <button
+                                            class="star-button {% if user_review and user_review.rating >= 2 %}selected{% endif %}"
+                                            type="button"
+                                            data-rating="2"
+                                            aria-label="2 stars"
+                                        >
+                                            ★
+                                        </button>
+
+                                        <button
+                                            class="star-button {% if user_review and user_review.rating >= 3 %}selected{% endif %}"
+                                            type="button"
+                                            data-rating="3"
+                                            aria-label="3 stars"
+                                        >
+                                            ★
+                                        </button>
+
+                                        <button
+                                            class="star-button {% if user_review and user_review.rating >= 4 %}selected{% endif %}"
+                                            type="button"
+                                            data-rating="4"
+                                            aria-label="4 stars"
+                                        >
+                                            ★
+                                        </button>
+
+                                        <button
+                                            class="star-button {% if user_review and user_review.rating >= 5 %}selected{% endif %}"
+                                            type="button"
+                                            data-rating="5"
+                                            aria-label="5 stars"
+                                        >
+                                            ★
+                                        </button>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <label
+                                            class="form-label"
+                                            for="review-text"
+                                        >
+                                            Written review
+                                        </label>
+
+                                        <textarea
+                                            class="form-control"
+                                            id="review-text"
+                                            name="review_text"
+                                            rows="5"
+                                            maxlength="1000"
+                                            placeholder="Share your experience with this package..."
+                                        >{% if user_review %}{{ user_review.review_text }}{% endif %}</textarea>
+                                    </div>
+
+                                    <button
+                                        class="btn btn-boost mt-4"
+                                        type="submit"
+                                    >
+                                        {% if user_review %}
+                                            Update review
+                                        {% else %}
+                                            Submit review
+                                        {% endif %}
+                                    </button>
+
+                                    <p
+                                        class="review-message"
+                                        id="review-message"
+                                        aria-live="polite"
+                                    ></p>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class="review-form-card">
+                                <h2>Want to leave a review?</h2>
+
+                                <p>
+                                    Log in to rate this package and share
+                                    your experience.
+                                </p>
+
+                                <a
+                                    class="btn btn-boost"
+                                    href="{% url 'accounts:login' %}"
+                                >
+                                    Log in
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-lg-7">
+                        <div
+                            class="review-list"
+                            id="review-list"
+                        >
+                            {% for review in reviews %}
+                                <article
+                                    class="review-card"
+                                    data-review-user-id="{{ review.user.id }}"
+                                >
+                                    <div class="review-card-heading">
+                                        <div>
+                                            <strong class="review-author">
+                                                {{ review.user.username }}
+                                            </strong>
+
+                                            <p class="review-date">
+                                                {{ review.updated_at|date:"d F Y, H:i" }}
+                                            </p>
+                                        </div>
+
+                                        <span class="review-stars">
+                                            {% if review.rating == 1 %}
+                                                ★☆☆☆☆
+                                            {% elif review.rating == 2 %}
+                                                ★★☆☆☆
+                                            {% elif review.rating == 3 %}
+                                                ★★★☆☆
+                                            {% elif review.rating == 4 %}
+                                                ★★★★☆
+                                            {% else %}
+                                                ★★★★★
+                                            {% endif %}
+                                        </span>
+                                    </div>
+
+                                    <p class="review-body">
+                                        {% if review.review_text %}
+                                            {{ review.review_text }}
+                                        {% else %}
+                                            No written review was provided.
+                                        {% endif %}
+                                    </p>
+                                </article>
+                            {% empty %}
+                                <p id="no-reviews-message">
+                                    No reviews yet. Be the first member
+                                    to rate this package.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </section>
+
+    <script src="{% static 'js/ratings.js' %}"></script>
 {% endblock %}

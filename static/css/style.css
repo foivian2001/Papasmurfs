@@ -1496,3 +1496,139 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.reviews-section {
+    margin-top: 4rem;
+}
+
+.reviews-heading {
+    margin-bottom: 2rem;
+}
+
+.reviews-heading h2 {
+    font-weight: 900;
+}
+
+.package-rating-summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.rating-stars,
+.review-stars {
+    color: #ffd166;
+    letter-spacing: 0.08rem;
+}
+
+.package-rating-summary > span:last-child {
+    color: #b9c3cf;
+}
+
+.review-form-card,
+.review-card {
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+}
+
+.review-form-card {
+    padding: 2rem;
+}
+
+.review-form-card h2 {
+    font-weight: 900;
+}
+
+.review-form-card > p {
+    color: #b9c3cf;
+}
+
+.star-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.star-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #586273;
+    font-size: 2.5rem;
+    line-height: 1;
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.star-button:hover,
+.star-button.selected {
+    color: #ffd166;
+    transform: translateY(-2px);
+}
+
+.review-message {
+    min-height: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+    color: var(--papasmurfs-cyan);
+}
+
+.review-message-error {
+    color: #ff7b7b;
+}
+
+.review-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.review-list > p {
+    padding: 2rem;
+    border: 1px solid #273241;
+    border-radius: 1rem;
+    background-color: var(--papasmurfs-panel);
+    color: #b9c3cf;
+}
+
+.review-card {
+    padding: 1.5rem;
+}
+
+.review-card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.review-author {
+    font-size: 1.05rem;
+}
+
+.review-date {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    color: #b9c3cf;
+    font-size: 0.85rem;
+}
+
+.review-body {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    color: #d9e0e8;
+    line-height: 1.7;
+}
+
+@media (max-width: 575px) {
+    .review-card-heading {
+        flex-direction: column;
+    }
+
+    .star-button {
+        font-size: 2.1rem;
+    }
+}
