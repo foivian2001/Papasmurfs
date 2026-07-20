@@ -7,18 +7,56 @@
 {% block content %}
     <section class="package-detail-section">
         <div class="container">
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <a
                 class="back-link"
                 href="{% url 'catalogue:package_list' %}"
             >
-                ← Back to all services
+                ← Back to Services
             </a>
 
-            <div class="package-detail-card">
+            <article class="package-detail-grid">
                 <div>
-                    <p class="section-label">
-                        {{ package.category.game.name }}
-                    </p>
+                    {% if package.image %}
+                        <img
+                            class="package-detail-image"
+                            src="{{ package.image.url }}"
+                            alt="{{ package.name }}"
+                        >
+                    {% elif package.category.game.image %}
+                        <img
+                            class="package-detail-image"
+                            src="{{ package.category.game.image.url }}"
+                            alt="{{ package.category.game.name }}"
+                        >
+                    {% else %}
+                        <div class="package-detail-image-placeholder">
+                            {{ package.category.game.name }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="package-detail-content">
+                    <div class="package-card-top">
+                        <span class="game-badge">
+                            {{ package.category.game.name }}
+                        </span>
+
+                        {% if package.is_featured %}
+                            <span class="featured-badge">
+                                Featured
+                            </span>
+                        {% endif %}
+                    </div>
 
                     <h1>{{ package.name }}</h1>
 
@@ -26,44 +64,73 @@
                         {{ package.description }}
                     </p>
 
-                    <div class="rank-route rank-route-large">
+                    <div class="rank-route">
                         <span>{{ package.current_rank.name }}</span>
                         <strong>→</strong>
                         <span>{{ package.target_rank.name }}</span>
                     </div>
-                </div>
 
-                <aside class="package-purchase-panel">
-                    <p class="purchase-label">
-                        Service price
-                    </p>
+                    <div class="package-detail-meta">
+                        <p>
+                            <strong>Service category:</strong>
+                            {{ package.category.name }}
+                        </p>
+
+                        <p>
+                            <strong>Estimated completion:</strong>
+                            {{ package.estimated_days }}
+                            day{{ package.estimated_days|pluralize }}
+                        </p>
+                    </div>
 
                     <p class="package-detail-price">
                         €{{ package.price }}
                     </p>
 
-                    <p>
-                        Estimated completion:
-                        <strong>
-                            {{ package.estimated_days }}
-                            day{{ package.estimated_days|pluralize }}
-                        </strong>
-                    </p>
+                    {% if user.is_authenticated %}
+                        <form
+                            class="add-to-cart-form"
+                            method="post"
+                            action="{% url 'cart:add' package.id %}"
+                        >
+                            {% csrf_token %}
 
-                    <p>
-                        Service type:
-                        <strong>{{ package.category.name }}</strong>
-                    </p>
+                            <div class="quantity-control">
+                                <label
+                                    class="form-label"
+                                    for="package-quantity"
+                                >
+                                    Quantity
+                                </label>
 
-                    <button
-                        class="btn btn-boost btn-lg w-100"
-                        type="button"
-                        disabled
-                    >
-                        Cart coming next
-                    </button>
-                </aside>
-            </div>
+                                <input
+                                    class="form-control"
+                                    id="package-quantity"
+                                    name="quantity"
+                                    type="number"
+                                    value="1"
+                                    min="1"
+                                    max="10"
+                                >
+                            </div>
+
+                            <button
+                                class="btn btn-boost"
+                                type="submit"
+                            >
+                                Add to cart
+                            </button>
+                        </form>
+                    {% else %}
+                        <a
+                            class="btn btn-boost"
+                            href="{% url 'accounts:login' %}"
+                        >
+                            Log in to add to cart
+                        </a>
+                    {% endif %}
+                </div>
+            </article>
         </div>
     </section>
 {% endblock %}

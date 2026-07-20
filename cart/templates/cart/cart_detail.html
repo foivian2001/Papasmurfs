@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Shopping Cart | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="cart-section">
+        <div class="container">
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <div class="site-message">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="cart-heading">
+                <div>
+                    <p class="section-label">
+                        Your selected services
+                    </p>
+
+                    <h1>Shopping Cart</h1>
+
+                    <p>
+                        Review your selected boosting packages before
+                        continuing to the simulated checkout.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'catalogue:package_list' %}"
+                >
+                    Continue browsing
+                </a>
+            </div>
+
+            {% if cart_items %}
+                <div class="row g-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="cart-items-card">
+                            {% for item in cart_items %}
+                                <article class="cart-item-row">
+                                    <div class="cart-item-media">
+                                        {% if item.package.image %}
+                                            <img
+                                                class="cart-item-image"
+                                                src="{{ item.package.image.url }}"
+                                                alt="{{ item.package.name }}"
+                                            >
+                                        {% else %}
+                                            <div class="cart-item-placeholder">
+                                                {{ item.package.category.game.name|first }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="cart-item-main">
+                                        <span class="game-badge">
+                                            {{ item.package.category.game.name }}
+                                        </span>
+
+                                        <h2>
+                                            <a
+                                                href="{% url 'catalogue:package_detail' item.package.id %}"
+                                            >
+                                                {{ item.package.name }}
+                                            </a>
+                                        </h2>
+
+                                        <p class="cart-item-meta">
+                                            {{ item.package.current_rank.name }}
+                                            →
+                                            {{ item.package.target_rank.name }}
+                                        </p>
+
+                                        <p class="cart-item-meta">
+                                            Estimated completion:
+                                            {{ item.package.estimated_days }}
+                                            day{{ item.package.estimated_days|pluralize }}
+                                        </p>
+
+                                        <div class="cart-item-actions">
+                                            <form
+                                                class="quantity-form"
+                                                method="post"
+                                                action="{% url 'cart:update_item' item.id %}"
+                                            >
+                                                {% csrf_token %}
+
+                                                <label
+                                                    class="form-label"
+                                                    for="quantity-{{ item.id }}"
+                                                >
+                                                    Quantity
+                                                </label>
+
+                                                <input
+                                                    class="form-control cart-quantity-input"
+                                                    id="quantity-{{ item.id }}"
+                                                    name="quantity"
+                                                    type="number"
+                                                    value="{{ item.quantity }}"
+                                                    min="1"
+                                                    max="10"
+                                                >
+
+                                                <button
+                                                    class="btn btn-outline-light"
+                                                    type="submit"
+                                                >
+                                                    Update
+                                                </button>
+                                            </form>
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'cart:remove_item' item.id %}"
+                                            >
+                                                {% csrf_token %}
+
+                                                <button
+                                                    class="btn btn-outline-danger"
+                                                    type="submit"
+                                                >
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="cart-item-price">
+                                        <span>
+                                            €{{ item.package.price }} each
+                                        </span>
+
+                                        <strong>
+                                            €{{ item.subtotal }}
+                                        </strong>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <aside class="cart-summary-card">
+                            <p class="section-label">
+                                Order summary
+                            </p>
+
+                            <h2>Cart total</h2>
+
+                            <div class="summary-row">
+                                <span>Items</span>
+                                <strong>{{ cart.total_items }}</strong>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Service subtotal</span>
+                                <strong>€{{ cart.total_price }}</strong>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Additional charges</span>
+                                <strong>€0.00</strong>
+                            </div>
+
+                            <div class="summary-row cart-total-row">
+                                <span>Total</span>
+                                <strong>€{{ cart.total_price }}</strong>
+                            </div>
+
+                            <button
+                                class="btn btn-boost w-100"
+                                type="button"
+                                disabled
+                            >
+                                Checkout coming next
+                            </button>
+
+                            <p class="cart-summary-note">
+                                No real payment will be processed.
+                            </p>
+                        </aside>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-cart-card">
+                    <h2>Your cart is empty</h2>
+
+                    <p>
+                        Browse the available services and select a
+                        package to begin your order.
+                    </p>
+
+                    <a
+                        class="btn btn-boost"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+                        Browse packages
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

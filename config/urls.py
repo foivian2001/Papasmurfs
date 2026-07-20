@@ -22,6 +22,10 @@ urlpatterns = [
         include("dashboard.urls"),
     ),
     path(
+        "cart/",
+        include("cart.urls"),
+    ),
+    path(
         "search/",
         include("searchapp.urls"),
     ),
