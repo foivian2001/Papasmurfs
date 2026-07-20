@@ -16,7 +16,7 @@
     "name": "GTA Online",
     "description": "GTA Online is a story-driven, open-world multiplayer action game where players create a unique criminal avatar and build an underworld empire in the fictional city of Los Santos and Blaine County. Accessible through Grand Theft Auto V or as a standalone title, it blends massive cooperative heists, competitive racing, dynamic freemode activities and much more.",
     "image": "games/gtaonlinelogopic.png",
-    "is_active": false
+    "is_active": true
   }
 },
 {
@@ -26,7 +26,7 @@
     "name": "Counter-Strike 2",
     "description": "Counter-Strike 2 (CS2) is a free-to-play, first-person shooter and the technical successor to Counter-Strike: Global Offensive. Built on Valve's Source 2 engine, it features upgraded graphics, reactive volumetric smoke grenades, and \"sub-tick\" server architecture for hyper-responsive gameplay. It retains the classic objective-based team combat.",
     "image": "games/csgo2pic.jpg",
-    "is_active": false
+    "is_active": true
   }
 },
 {
@@ -36,7 +36,7 @@
     "name": "Fortnite",
     "description": "Fortnite is a massively popular free-to-play online video game released by Epic Games in 2017. It has evolved from a single battle royale shooter into a massive digital entertainment platform featuring multiple modes, including a 100-player survival competition, co-op tower defense, creator-made islands, rhythm games, and racing",
     "image": "games/Fortnite_F_lettermark_logo.png",
-    "is_active": false
+    "is_active": true
   }
 },
 {
@@ -63,7 +63,7 @@
   "fields": {
     "game": 3,
     "name": "Competitive Rank Boost",
-    "description": "Advance through Counter-Strike’s competitive ranks with a tailored boost based on your current skill group and desired target rank."
+    "description": "Advance through Counter-Strikeâ€™s competitive ranks with a tailored boost based on your current skill group and desired target rank."
   }
 },
 {
@@ -595,6 +595,222 @@
     "is_active": true,
     "created_at": "2026-07-14T15:10:23.689Z",
     "updated_at": "2026-07-14T15:13:04.958Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "current_rank": 2,
+    "target_rank": 3,
+    "name": "Bronze to Silver Boost",
+    "description": "Boost your League of Legends account from Bronze to Silver with a fast and reliable rank-boosting service. Progress is handled efficiently, with clear delivery expectations and regular order updates.",
+    "price": "30.00",
+    "estimated_days": 2,
+    "image": "packages/LOL_WTRDcn6.jpg",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:01:48.958Z",
+    "updated_at": "2026-07-20T19:02:06.031Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "current_rank": 3,
+    "target_rank": 4,
+    "name": "Silver to Gold Boost",
+    "description": "Boost your League of Legends account from Silver to Gold with a fast and reliable rank-boosting service. Progress is handled efficiently, with clear delivery expectations and regular order updates.",
+    "price": "40.00",
+    "estimated_days": 2,
+    "image": "packages/LOL_jJWt7zo.jpg",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:03:06.835Z",
+    "updated_at": "2026-07-20T19:03:06.835Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "current_rank": 4,
+    "target_rank": 5,
+    "name": "Gold to Platinum Boost",
+    "description": "Boost your League of Legends account from Gold to Platinum with a fast and reliable rank-boosting service. Progress is handled efficiently, with clear delivery expectations and regular order updates.",
+    "price": "50.00",
+    "estimated_days": 3,
+    "image": "packages/LOL_puXJENj.jpg",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:04:11.080Z",
+    "updated_at": "2026-07-20T19:04:20.305Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 5,
+  "fields": {
+    "category": 3,
+    "current_rank": 20,
+    "target_rank": 26,
+    "name": "Silver 1 to Gold Nova 1 Boost",
+    "description": "Boost your CS2 account from Silver I to Gold Nova I with a reliable competitive rank-boosting service. Progress is handled efficiently with clear delivery expectations and regular order updates.",
+    "price": "60.00",
+    "estimated_days": 3,
+    "image": "packages/csgo2pic.jpg",
+    "is_featured": false,
+    "is_active": true,
+    "created_at": "2026-07-20T19:06:17.501Z",
+    "updated_at": "2026-07-20T19:09:25.378Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 6,
+  "fields": {
+    "category": 3,
+    "current_rank": 26,
+    "target_rank": 30,
+    "name": "Gold Nova to Master Guardian 1 Boost",
+    "description": "Boost your CS2 account from Gold Nova I to Master Guardian I with a focused competitive ranking service. The package offers steady progression, clear delivery expectations and regular order updates.",
+    "price": "40.00",
+    "estimated_days": 2,
+    "image": "packages/csgo2pic_41cDaC3.jpg",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:07:13.899Z",
+    "updated_at": "2026-07-20T19:07:13.900Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 7,
+  "fields": {
+    "category": 3,
+    "current_rank": 30,
+    "target_rank": 34,
+    "name": "Master Guardian 1 to Legendary Eagle Boost",
+    "description": "Advance your CS2 account from Master Guardian I to Legendary Eagle with a higher-level competitive rank boost. Progress is managed efficiently with transparent delivery estimates and regular order updates.",
+    "price": "100.00",
+    "estimated_days": 7,
+    "image": "packages/csgo2pic_9LqNgvs.jpg",
+    "is_featured": false,
+    "is_active": true,
+    "created_at": "2026-07-20T19:08:28.050Z",
+    "updated_at": "2026-07-20T19:08:28.050Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 8,
+  "fields": {
+    "category": 2,
+    "current_rank": 10,
+    "target_rank": 15,
+    "name": "Thug to Facilitator Boost",
+    "description": "Boost your GTA Online account from Thug to Facilitator with a reliable RP and level progression service. This package is designed for efficient account growth, with clear delivery expectations and regular order updates.",
+    "price": "100.00",
+    "estimated_days": 14,
+    "image": "packages/gtaonlinelogopic.png",
+    "is_featured": false,
+    "is_active": true,
+    "created_at": "2026-07-20T19:12:29.032Z",
+    "updated_at": "2026-07-20T19:12:29.032Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 9,
+  "fields": {
+    "category": 2,
+    "current_rank": 15,
+    "target_rank": 19,
+    "name": "Facilitator to Kingpin Boost",
+    "description": "Advance your GTA Online account from Facilitator to Kingpin with a higher-level RP and progression boost. The service provides efficient account development, transparent delivery estimates and regular order updates.",
+    "price": "250.00",
+    "estimated_days": 30,
+    "image": "packages/gtaonlinelogopic_DXUDlbQ.png",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:13:10.063Z",
+    "updated_at": "2026-07-20T19:13:10.063Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 10,
+  "fields": {
+    "category": 4,
+    "current_rank": 38,
+    "target_rank": 44,
+    "name": "Bronze to Gold Boost",
+    "description": "Boost your Fortnite account from Bronze to Gold with a reliable competitive rank progression service. This package provides efficient advancement, clear delivery expectations and regular order updates.",
+    "price": "75.00",
+    "estimated_days": 5,
+    "image": "packages/Fortnite_F_lettermark_logo.png",
+    "is_featured": false,
+    "is_active": true,
+    "created_at": "2026-07-20T19:14:48.380Z",
+    "updated_at": "2026-07-20T19:14:48.380Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 11,
+  "fields": {
+    "category": 4,
+    "current_rank": 44,
+    "target_rank": 50,
+    "name": "Gold to Diamond Boost",
+    "description": "Advance your Fortnite account from Gold to Diamond with a higher-level competitive rank boost. The service focuses on steady progression, transparent delivery estimates and regular updates throughout the order.",
+    "price": "150.00",
+    "estimated_days": 14,
+    "image": "packages/Fortnite_F_lettermark_logo_cRZ23md.png",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:15:49.762Z",
+    "updated_at": "2026-07-20T19:15:49.762Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 12,
+  "fields": {
+    "category": 5,
+    "current_rank": 38,
+    "target_rank": 44,
+    "name": "Zero Build Bronze to Gold Boost",
+    "description": "Boost your Fortnite Zero Build rank from Bronze to Gold with a reliable competitive progression service. This package provides efficient advancement, clear delivery expectations and regular updates throughout the order.",
+    "price": "30.00",
+    "estimated_days": 3,
+    "image": "packages/Fortnite_F_lettermark_logo_x1gB27F.png",
+    "is_featured": false,
+    "is_active": true,
+    "created_at": "2026-07-20T19:17:06.945Z",
+    "updated_at": "2026-07-20T19:17:06.945Z"
+  }
+},
+{
+  "model": "catalogue.boostpackage",
+  "pk": 13,
+  "fields": {
+    "category": 5,
+    "current_rank": 44,
+    "target_rank": 50,
+    "name": "Zero Build Gold to Diamond Boost",
+    "description": "Advance your Fortnite Zero Build rank from Gold to Diamond with a higher-level competitive boost. The service focuses on steady progression, transparent delivery estimates and regular order updates.",
+    "price": "80.00",
+    "estimated_days": 14,
+    "image": "packages/Fortnite_F_lettermark_logo_kokDnSX.png",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-07-20T19:17:56.979Z",
+    "updated_at": "2026-07-20T19:17:56.979Z"
   }
 }
 ]
