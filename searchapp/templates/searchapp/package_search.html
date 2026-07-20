@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Search Services | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="search-section">
+        <div class="container">
+            <div class="search-heading">
+                <p class="section-label">
+                    Find your service
+                </p>
+
+                <h1>Search and filter packages</h1>
+
+                <p>
+                    Search by package name or narrow the catalogue
+                    by game, rank, price and completion time.
+                </p>
+            </div>
+
+            <form
+                class="search-panel"
+                method="get"
+                action="{% url 'search:package_search' %}"
+            >
+                {% if form.non_field_errors %}
+                    <div class="site-message site-message-error">
+                        {% for error in form.non_field_errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="search-grid">
+                    <div class="search-field search-field-wide">
+                        <label
+                            class="form-label"
+                            for="{{ form.query.id_for_label }}"
+                        >
+                            {{ form.query.label }}
+                        </label>
+
+                        {{ form.query }}
+
+                        {% for error in form.query.errors %}
+                            <p class="form-error">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.game.id_for_label }}"
+                        >
+                            {{ form.game.label }}
+                        </label>
+
+                        {{ form.game }}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.category.id_for_label }}"
+                        >
+                            {{ form.category.label }}
+                        </label>
+
+                        {{ form.category }}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.current_rank.id_for_label }}"
+                        >
+                            {{ form.current_rank.label }}
+                        </label>
+
+                        {{ form.current_rank }}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.target_rank.id_for_label }}"
+                        >
+                            {{ form.target_rank.label }}
+                        </label>
+
+                        {{ form.target_rank }}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.minimum_price.id_for_label }}"
+                        >
+                            {{ form.minimum_price.label }}
+                        </label>
+
+                        {{ form.minimum_price }}
+
+                        {% for error in form.minimum_price.errors %}
+                            <p class="form-error">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.maximum_price.id_for_label }}"
+                        >
+                            {{ form.maximum_price.label }}
+                        </label>
+
+                        {{ form.maximum_price }}
+
+                        {% for error in form.maximum_price.errors %}
+                            <p class="form-error">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="search-field">
+                        <label
+                            class="form-label"
+                            for="{{ form.maximum_days.id_for_label }}"
+                        >
+                            {{ form.maximum_days.label }}
+                        </label>
+
+                        {{ form.maximum_days }}
+                    </div>
+                </div>
+
+                <div class="search-bottom-row">
+                    <div class="form-check">
+                        {{ form.featured_only }}
+
+                        <label
+                            class="form-check-label"
+                            for="{{ form.featured_only.id_for_label }}"
+                        >
+                            {{ form.featured_only.label }}
+                        </label>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button
+                            class="btn btn-boost"
+                            type="submit"
+                        >
+                            Apply filters
+                        </button>
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'search:package_search' %}"
+                        >
+                            Clear filters
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <div class="search-results-heading">
+                <div>
+                    <p class="section-label">
+                        Results
+                    </p>
+
+                    <h2>
+                        {{ result_count }}
+                        package{{ result_count|pluralize }}
+                        found
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                {% for package in packages %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="package-card h-100">
+                            <div class="package-card-top">
+                                <span class="game-badge">
+                                    {{ package.category.game.name }}
+                                </span>
+
+                                {% if package.is_featured %}
+                                    <span class="featured-badge">
+                                        Featured
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <h2>{{ package.name }}</h2>
+
+                            <p class="package-description">
+                                {{ package.description|truncatewords:24 }}
+                            </p>
+
+                            <div class="rank-route">
+                                <span>
+                                    {{ package.current_rank.name }}
+                                </span>
+
+                                <strong>→</strong>
+
+                                <span>
+                                    {{ package.target_rank.name }}
+                                </span>
+                            </div>
+
+                            <div class="package-information">
+                                <p>
+                                    <strong>Category:</strong>
+                                    {{ package.category.name }}
+                                </p>
+
+                                <p>
+                                    <strong>Completion:</strong>
+                                    {{ package.estimated_days }}
+                                    day{{ package.estimated_days|pluralize }}
+                                </p>
+                            </div>
+
+                            <div class="package-card-bottom">
+                                <p class="package-price">
+                                    €{{ package.price }}
+                                </p>
+
+                                <a
+                                    class="btn btn-boost"
+                                    href="{% url 'catalogue:package_detail' package.id %}"
+                                >
+                                    View package
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="empty-catalogue">
+                            <h2>No packages matched your filters</h2>
+
+                            <p>
+                                Try removing some filters or increasing
+                                the selected price range.
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

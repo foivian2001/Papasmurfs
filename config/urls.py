@@ -7,6 +7,7 @@ urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("control-panel/", include("controlpanel.urls")),
     path("account/", include("accounts.urls")),
+    path("search/", include("searchapp.urls")),
     path("services/", include("catalogue.urls")),
     path("", include("core.urls")),
 ]
@@ -16,3 +17,4 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT,
     )
+

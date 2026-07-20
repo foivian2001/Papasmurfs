@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'catalogue',
     'accounts',
     'controlpanel',
+    "searchapp",
 ]
 
 MIDDLEWARE = [
