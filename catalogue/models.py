@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -7,7 +8,12 @@ class Game(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
-    image = models.ImageField(upload_to="games/")
+
+    image = CloudinaryField(
+        "image",
+        folder="papasmurfs/games",
+    )
+
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -25,11 +31,13 @@ class ServiceCategory(models.Model):
         on_delete=models.CASCADE,
         related_name="service_categories",
     )
+
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
     class Meta:
         ordering = ["game__name", "name"]
+
         constraints = [
             models.UniqueConstraint(
                 fields=["game", "name"],
@@ -49,11 +57,13 @@ class Rank(models.Model):
         on_delete=models.CASCADE,
         related_name="ranks",
     )
+
     name = models.CharField(max_length=100)
     rank_order = models.PositiveIntegerField()
 
     class Meta:
         ordering = ["game__name", "rank_order"]
+
         constraints = [
             models.UniqueConstraint(
                 fields=["game", "name"],
@@ -77,29 +87,38 @@ class BoostPackage(models.Model):
         on_delete=models.CASCADE,
         related_name="packages",
     )
+
     current_rank = models.ForeignKey(
         Rank,
         on_delete=models.PROTECT,
         related_name="packages_starting_here",
     )
+
     target_rank = models.ForeignKey(
         Rank,
         on_delete=models.PROTECT,
         related_name="packages_ending_here",
     )
+
     name = models.CharField(max_length=150)
     description = models.TextField()
+
     price = models.DecimalField(
         max_digits=8,
         decimal_places=2,
     )
+
     estimated_days = models.PositiveIntegerField()
-    image = models.ImageField(
-        upload_to="packages/",
+
+    image = CloudinaryField(
+        "image",
+        folder="papasmurfs/packages",
         blank=True,
     )
+
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -107,7 +126,7 @@ class BoostPackage(models.Model):
         ordering = ["category__game__name", "price"]
 
     def clean(self):
-        """Validate that the package ranks belong to the correct game."""
+        """Validate that package ranks belong to the correct game."""
 
         errors = {}
 
@@ -125,9 +144,13 @@ class BoostPackage(models.Model):
 
         if self.current_rank_id and self.target_rank_id:
             if self.current_rank.game_id == self.target_rank.game_id:
-                if self.current_rank.rank_order >= self.target_rank.rank_order:
+                if (
+                    self.current_rank.rank_order
+                    >= self.target_rank.rank_order
+                ):
                     errors["target_rank"] = (
-                        "The target rank must be higher than the current rank."
+                        "The target rank must be higher "
+                        "than the current rank."
                     )
 
         if errors:
@@ -135,3 +158,4 @@ class BoostPackage(models.Model):
 
     def __str__(self):
         return self.name
+    

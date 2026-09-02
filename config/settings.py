@@ -96,6 +96,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "cloudinary",
+
     "core",
     "catalogue",
     "accounts",
@@ -108,7 +110,6 @@ INSTALLED_APPS = [
     "recommendations",
     "usermanagement",
 ]
-
 
 # ---------------------------------------------------------------------
 # Middleware
