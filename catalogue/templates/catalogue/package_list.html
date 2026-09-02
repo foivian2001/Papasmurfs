@@ -1,152 +1,1007 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block title %}
+
     Boosting Services | Papasmurfs
+
 {% endblock %}
 
+
 {% block content %}
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
     <section class="catalogue-header">
+
         <div class="container">
+
             <p class="section-label">
                 Papasmurfs catalogue
             </p>
 
-            <h1>Choose your boost</h1>
+            <h1>
+                Choose your boost
+            </h1>
 
             <p>
-                Select your game, current rank and desired destination.
-                We will handle the climb.
+                Browse our boosting services by game,
+                category, rank progression, price and
+                estimated completion time.
             </p>
+
         </div>
+
     </section>
 
+
+
+    <!-- =====================================================
+         GAME SELECTION
+    ====================================================== -->
+
     <section class="catalogue-section">
+
         <div class="container">
+
+            <div class="mb-4">
+
+                <p class="section-label">
+                    Step 1
+                </p>
+
+                <h2>
+                    Choose your game
+                </h2>
+
+                <p>
+                    Start by selecting the game you want
+                    to browse.
+                </p>
+
+            </div>
+
+
             <div class="row g-4">
-                {% for package in packages %}
-                    <div class="col-12 col-md-6 col-xl-4">
-                        <article class="package-card h-100">
-                            <div class="package-card-image-wrapper">
-                                {% if package.category.game.name == "League of Legends" %}
-                                    <img
-                                        class="package-card-image"
-                                        src="{% static 'images/games/league-of-legends.png' %}"
-                                        alt="League of Legends"
-                                    >
 
-                                {% elif package.category.game.name == "Counter-Strike 2" %}
-                                    <img
-                                        class="package-card-image"
-                                        src="{% static 'images/games/counter-strike-2.png' %}"
-                                        alt="Counter-Strike 2"
-                                    >
+                {% for game in games %}
 
-                                {% elif package.category.game.name == "CS2" %}
-                                    <img
-                                        class="package-card-image"
-                                        src="{% static 'images/games/counter-strike-2.png' %}"
-                                        alt="Counter-Strike 2"
-                                    >
+                    <div class="col-12 col-sm-6 col-lg-3">
 
-                                {% elif package.category.game.name == "CS:GO / CS2" %}
-                                    <img
-                                        class="package-card-image"
-                                        src="{% static 'images/games/counter-strike-2.png' %}"
-                                        alt="Counter-Strike 2"
-                                    >
+                        <a
+                            href="?game={{ game.id }}"
+                            class="text-decoration-none"
+                        >
 
-                                {% elif package.category.game.name == "Fortnite" %}
-                                    <img
-                                        class="package-card-image"
-                                        src="{% static 'images/games/fortnite.png' %}"
-                                        alt="Fortnite"
-                                    >
+                            <article class="package-card h-100">
 
-                                {% elif package.category.game.name == "GTA Online" %}
-                                    <img
-                                        class="package-card-image"
-                                        src="{% static 'images/games/gta-online.png' %}"
-                                        alt="GTA Online"
-                                    >
+                                <div class="package-card-image-wrapper">
 
-                                {% else %}
-                                    <div class="package-card-image-placeholder">
-                                        {{ package.category.game.name }}
-                                    </div>
-                                {% endif %}
-                            </div>
+                                    {% if game.image %}
 
-                            <div class="package-card-top">
-                                <span class="game-badge">
-                                    {{ package.category.game.name }}
-                                </span>
+                                        <img
+                                            class="package-card-image"
+                                            src="{{ game.image.url }}"
+                                            alt="{{ game.name }}"
+                                        >
 
-                                {% if package.is_featured %}
+                                    {% else %}
+
+                                        <div class="package-card-image-placeholder">
+
+                                            {{ game.name }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <h2>
+                                    {{ game.name }}
+                                </h2>
+
+
+                                <p>
+                                    Browse available
+                                    {{ game.name }}
+                                    boosting services.
+                                </p>
+
+
+                                {% if selected_game.id == game.id %}
+
                                     <span class="featured-badge">
-                                        Featured
+                                        Selected
                                     </span>
+
                                 {% endif %}
-                            </div>
 
-                            <h2>{{ package.name }}</h2>
+                            </article>
 
-                            <p class="package-description">
-                                {{ package.description|truncatewords:24 }}
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FEATURED SERVICES
+         Only shown before a game is selected.
+    ====================================================== -->
+
+    {% if not selected_game %}
+
+        <section class="catalogue-section">
+
+            <div class="container">
+
+                <div class="mb-4">
+
+                    <p class="section-label">
+                        Popular choices
+                    </p>
+
+                    <h2>
+                        Featured Services
+                    </h2>
+
+                    <p>
+                        Some of our most popular boosting
+                        options across all games.
+                    </p>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    {% for package in featured_packages %}
+
+                        <div class="col-12 col-md-6 col-xl-4">
+
+                            <article class="package-card h-100">
+
+
+                                <!-- IMAGE -->
+
+                                <div class="package-card-image-wrapper">
+
+                                    {% if package.image %}
+
+                                        <img
+                                            class="package-card-image"
+                                            src="{{ package.image.url }}"
+                                            alt="{{ package.name }}"
+                                        >
+
+                                    {% elif package.category.game.image %}
+
+                                        <img
+                                            class="package-card-image"
+                                            src="{{ package.category.game.image.url }}"
+                                            alt="{{ package.category.game.name }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="package-card-image-placeholder">
+
+                                            {{ package.category.game.name }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+
+
+                                <!-- BADGES -->
+
+                                <div class="package-card-top">
+
+                                    <span class="game-badge">
+
+                                        {{ package.category.game.name }}
+
+                                    </span>
+
+
+                                    <span class="featured-badge">
+
+                                        Featured
+
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- NAME -->
+
+                                <h2>
+                                    {{ package.name }}
+                                </h2>
+
+
+
+                                <!-- DESCRIPTION -->
+
+                                <p class="package-description">
+
+                                    {{ package.description }}
+
+                                </p>
+
+
+
+                                <!-- RANK ROUTE -->
+
+                                <div class="rank-route">
+
+                                    <span>
+                                        {{ package.current_rank.name }}
+                                    </span>
+
+                                    <strong>
+                                        →
+                                    </strong>
+
+                                    <span>
+                                        {{ package.target_rank.name }}
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- DETAILS -->
+
+                                <div class="package-information">
+
+                                    <p>
+
+                                        <strong>
+                                            Category:
+                                        </strong>
+
+                                        {{ package.category.name }}
+
+                                    </p>
+
+
+                                    <p>
+
+                                        <strong>
+                                            Estimated time:
+                                        </strong>
+
+                                        {{ package.estimated_days }}
+
+                                        day{{ package.estimated_days|pluralize }}
+
+                                    </p>
+
+                                </div>
+
+
+
+                                <!-- PRICE / LINK -->
+
+                                <div class="package-card-bottom">
+
+                                    <p class="package-price">
+
+                                        €{{ package.price }}
+
+                                    </p>
+
+
+                                    <a
+                                        class="btn btn-boost"
+                                        href="{% url 'catalogue:package_detail' package.id %}"
+                                    >
+                                        View package
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                    {% empty %}
+
+                        <div class="col-12">
+
+                            <p>
+                                No featured services are
+                                available yet.
                             </p>
 
-                            <div class="rank-route">
-                                <span>
-                                    {{ package.current_rank.name }}
-                                </span>
+                        </div>
 
-                                <strong>→</strong>
+                    {% endfor %}
 
-                                <span>
-                                    {{ package.target_rank.name }}
-                                </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         SELECTED GAME CATALOGUE
+    ====================================================== -->
+
+    {% if selected_game %}
+
+        <section class="catalogue-section">
+
+            <div class="container">
+
+
+                <!-- SELECTED GAME -->
+
+                <div class="mb-4">
+
+                    <p class="section-label">
+                        Step 2
+                    </p>
+
+                    <h2>
+                        {{ selected_game.name }} Services
+                    </h2>
+
+                    <p>
+                        Narrow the catalogue using the
+                        options below.
+                    </p>
+
+
+                    <a
+                        class="btn btn-outline-light btn-sm"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+                        Change game
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FILTER FORM
+                ================================================== -->
+
+                <div
+                    class="management-table-wrapper mb-5"
+                    style="padding: 1.25rem;"
+                >
+
+                    <form
+                        method="get"
+                        action="{% url 'catalogue:package_list' %}"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="game"
+                            value="{{ selected_game.id }}"
+                        >
+
+
+                        <div class="row g-3">
+
+
+                            <!-- CATEGORY -->
+
+                            <div class="col-12 col-md-6 col-xl-4">
+
+                                <label
+                                    class="form-label"
+                                    for="serviceCategoryFilter"
+                                >
+                                    Category
+                                </label>
+
+
+                                <select
+                                    id="serviceCategoryFilter"
+                                    class="form-select"
+                                    name="category"
+                                >
+
+                                    <option value="">
+                                        All categories
+                                    </option>
+
+
+                                    {% for category in categories %}
+
+                                        <option
+                                            value="{{ category.id }}"
+                                            {% if selected_category == category.id|stringformat:"s" %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{ category.name }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
                             </div>
 
-                            <div class="package-information">
-                                <p>
-                                    <strong>Category:</strong>
-                                    {{ package.category.name }}
-                                </p>
 
-                                <p>
-                                    <strong>Estimated time:</strong>
-                                    {{ package.estimated_days }}
-                                    day{{ package.estimated_days|pluralize }}
-                                </p>
+
+                            <!-- CURRENT RANK -->
+
+                            <div class="col-12 col-md-6 col-xl-4">
+
+                                <label
+                                    class="form-label"
+                                    for="currentRankFilter"
+                                >
+                                    Current Rank
+                                </label>
+
+
+                                <select
+                                    id="currentRankFilter"
+                                    class="form-select"
+                                    name="current_rank"
+                                >
+
+                                    <option value="">
+                                        Any current rank
+                                    </option>
+
+
+                                    {% for rank in ranks %}
+
+                                        <option
+                                            value="{{ rank.id }}"
+                                            {% if selected_current_rank == rank.id|stringformat:"s" %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{ rank.name }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
                             </div>
 
-                            <div class="package-card-bottom">
-                                <p class="package-price">
-                                    €{{ package.price }}
+
+
+                            <!-- TARGET RANK -->
+
+                            <div class="col-12 col-md-6 col-xl-4">
+
+                                <label
+                                    class="form-label"
+                                    for="targetRankFilter"
+                                >
+                                    Target Rank
+                                </label>
+
+
+                                <select
+                                    id="targetRankFilter"
+                                    class="form-select"
+                                    name="target_rank"
+                                >
+
+                                    <option value="">
+                                        Any target rank
+                                    </option>
+
+
+                                    {% for rank in ranks %}
+
+                                        <option
+                                            value="{{ rank.id }}"
+                                            {% if selected_target_rank == rank.id|stringformat:"s" %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{ rank.name }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+
+                            <!-- MAX PRICE -->
+
+                            <div class="col-12 col-md-6 col-xl-3">
+
+                                <label
+                                    class="form-label"
+                                    for="maximumPriceFilter"
+                                >
+                                    Maximum Price (€)
+                                </label>
+
+
+                                <input
+                                    id="maximumPriceFilter"
+                                    class="form-control"
+                                    type="number"
+                                    name="max_price"
+                                    min="0"
+                                    step="1"
+                                    value="{{ selected_max_price }}"
+                                    placeholder="Example: 100"
+                                >
+
+                            </div>
+
+
+
+                            <!-- MAX DAYS -->
+
+                            <div class="col-12 col-md-6 col-xl-3">
+
+                                <label
+                                    class="form-label"
+                                    for="maximumDaysFilter"
+                                >
+                                    Maximum Completion Time
+                                </label>
+
+
+                                <input
+                                    id="maximumDaysFilter"
+                                    class="form-control"
+                                    type="number"
+                                    name="max_days"
+                                    min="1"
+                                    value="{{ selected_max_days }}"
+                                    placeholder="Days"
+                                >
+
+                            </div>
+
+
+
+                            <!-- SORT -->
+
+                            <div class="col-12 col-md-6 col-xl-3">
+
+                                <label
+                                    class="form-label"
+                                    for="serviceSortFilter"
+                                >
+                                    Sort By
+                                </label>
+
+
+                                <select
+                                    id="serviceSortFilter"
+                                    class="form-select"
+                                    name="sort"
+                                >
+
+                                    <option
+                                        value="recommended"
+                                        {% if selected_sort == "recommended" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Recommended
+                                    </option>
+
+
+                                    <option
+                                        value="price_low"
+                                        {% if selected_sort == "price_low" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Price: Low to High
+                                    </option>
+
+
+                                    <option
+                                        value="price_high"
+                                        {% if selected_sort == "price_high" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Price: High to Low
+                                    </option>
+
+
+                                    <option
+                                        value="fastest"
+                                        {% if selected_sort == "fastest" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Fastest First
+                                    </option>
+
+
+                                    <option
+                                        value="target"
+                                        {% if selected_sort == "target" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Target Rank
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <!-- BUTTON -->
+
+                            <div
+                                class="col-12 col-md-6 col-xl-3
+                                       d-flex align-items-end"
+                            >
+
+                                <button
+                                    class="btn btn-boost w-100"
+                                    type="submit"
+                                >
+                                    Apply Filters
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div
+                            class="d-flex flex-wrap
+                                   align-items-center
+                                   gap-3 mt-4"
+                        >
+
+                            <a
+                                class="btn btn-outline-light btn-sm"
+                                href="?game={{ selected_game.id }}"
+                            >
+                                Clear Filters
+                            </a>
+
+
+                            <span class="ms-md-auto">
+
+                                <strong>
+                                    {{ result_count }}
+                                </strong>
+
+                                service{{ result_count|pluralize }}
+                                found
+
+                            </span>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PACKAGE RESULTS
+                ================================================== -->
+
+                <div class="row g-4">
+
+                    {% for package in page_obj %}
+
+                        <div class="col-12 col-md-6 col-xl-4">
+
+                            <article class="package-card h-100">
+
+
+                                <!-- IMAGE -->
+
+                                <div class="package-card-image-wrapper">
+
+                                    {% if package.image %}
+
+                                        <img
+                                            class="package-card-image"
+                                            src="{{ package.image.url }}"
+                                            alt="{{ package.name }}"
+                                        >
+
+                                    {% elif package.category.game.image %}
+
+                                        <img
+                                            class="package-card-image"
+                                            src="{{ package.category.game.image.url }}"
+                                            alt="{{ package.category.game.name }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="package-card-image-placeholder">
+
+                                            {{ package.category.game.name }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+
+
+                                <!-- BADGES -->
+
+                                <div class="package-card-top">
+
+                                    <span class="game-badge">
+
+                                        {{ package.category.game.name }}
+
+                                    </span>
+
+
+                                    {% if package.is_featured %}
+
+                                        <span class="featured-badge">
+
+                                            Featured
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+
+                                <!-- PACKAGE NAME -->
+
+                                <h2>
+                                    {{ package.name }}
+                                </h2>
+
+
+
+                                <!-- FULL DESCRIPTION -->
+
+                                <p class="package-description">
+
+                                    {{ package.description }}
+
+                                </p>
+
+
+
+                                <!-- RANK ROUTE -->
+
+                                <div class="rank-route">
+
+                                    <span>
+                                        {{ package.current_rank.name }}
+                                    </span>
+
+                                    <strong>
+                                        →
+                                    </strong>
+
+                                    <span>
+                                        {{ package.target_rank.name }}
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- INFORMATION -->
+
+                                <div class="package-information">
+
+                                    <p>
+
+                                        <strong>
+                                            Category:
+                                        </strong>
+
+                                        {{ package.category.name }}
+
+                                    </p>
+
+
+                                    <p>
+
+                                        <strong>
+                                            Estimated time:
+                                        </strong>
+
+                                        {{ package.estimated_days }}
+
+                                        day{{ package.estimated_days|pluralize }}
+
+                                    </p>
+
+                                </div>
+
+
+
+                                <!-- PRICE / DETAILS -->
+
+                                <div class="package-card-bottom">
+
+                                    <p class="package-price">
+
+                                        €{{ package.price }}
+
+                                    </p>
+
+
+                                    <a
+                                        class="btn btn-boost"
+                                        href="{% url 'catalogue:package_detail' package.id %}"
+                                    >
+                                        View package
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+
+                    {% empty %}
+
+                        <div class="col-12">
+
+                            <div class="empty-catalogue">
+
+                                <h2>
+                                    No matching services
+                                </h2>
+
+                                <p>
+                                    Try changing one or more
+                                    of your catalogue filters.
                                 </p>
 
                                 <a
                                     class="btn btn-boost"
-                                    href="{% url 'catalogue:package_detail' package.id %}"
+                                    href="?game={{ selected_game.id }}"
                                 >
-                                    View package
+                                    Clear filters
                                 </a>
-                            </div>
-                        </article>
-                    </div>
-                {% empty %}
-                    <div class="col-12">
-                        <div class="empty-catalogue">
-                            <h2>No packages available yet</h2>
 
-                            <p>
-                                The catalogue is connected correctly,
-                                but we have not added our sample services yet.
-                            </p>
+                            </div>
+
                         </div>
-                    </div>
-                {% endfor %}
+
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PAGINATION
+                ================================================== -->
+
+                {% if page_obj.has_other_pages %}
+
+                    <nav
+                        class="mt-5"
+                        aria-label="Catalogue pages"
+                    >
+
+                        <ul
+                            class="pagination
+                                   justify-content-center"
+                        >
+
+
+                            <!-- PREVIOUS -->
+
+                            {% if page_obj.has_previous %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="?game={{ selected_game.id }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_current_rank %}&current_rank={{ selected_current_rank }}{% endif %}{% if selected_target_rank %}&target_rank={{ selected_target_rank }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if selected_max_days %}&max_days={{ selected_max_days }}{% endif %}&sort={{ selected_sort }}&page={{ page_obj.previous_page_number }}"
+                                    >
+                                        Previous
+                                    </a>
+
+                                </li>
+
+                            {% endif %}
+
+
+
+                            <!-- CURRENT PAGE -->
+
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+
+                                    Page
+                                    {{ page_obj.number }}
+                                    of
+                                    {{ page_obj.paginator.num_pages }}
+
+                                </span>
+
+                            </li>
+
+
+
+                            <!-- NEXT -->
+
+                            {% if page_obj.has_next %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="?game={{ selected_game.id }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_current_rank %}&current_rank={{ selected_current_rank }}{% endif %}{% if selected_target_rank %}&target_rank={{ selected_target_rank }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if selected_max_days %}&max_days={{ selected_max_days }}{% endif %}&sort={{ selected_sort }}&page={{ page_obj.next_page_number }}"
+                                    >
+                                        Next
+                                    </a>
+
+                                </li>
+
+                            {% endif %}
+
+                        </ul>
+
+                    </nav>
+
+                {% endif %}
+
             </div>
-        </div>
-    </section>
+
+        </section>
+
+    {% endif %}
+
+
 {% endblock %}
