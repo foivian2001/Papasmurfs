@@ -1,25 +1,45 @@
 {% extends "base.html" %}
 
+
 {% block title %}
-    Manage Boost Packages | Papasmurfs
+
+    Manage Packages | Papasmurfs
+
 {% endblock %}
 
+
 {% block content %}
+
     <section class="control-panel-section">
+
         <div class="container">
+
+
+            <!-- =========================================
+                 PAGE HEADING
+            ========================================== -->
+
             <div class="management-page-heading">
+
                 <div>
+
                     <p class="section-label">
                         Catalogue administration
                     </p>
 
-                    <h1>Manage Boost Packages</h1>
+
+                    <h1>
+                        Manage Packages
+                    </h1>
+
 
                     <p>
-                        Create and manage the purchasable services
-                        displayed in the public catalogue.
+                        Create, edit, filter and manage all
+                        Papasmurfs boosting packages.
                     </p>
+
                 </div>
+
 
                 <a
                     class="btn btn-boost"
@@ -27,126 +47,543 @@
                 >
                     Add new package
                 </a>
+
             </div>
 
+
+
+            <!-- =========================================
+                 MESSAGES
+            ========================================== -->
+
             {% if messages %}
+
                 <div class="message-container">
+
                     {% for message in messages %}
+
                         <div class="site-message">
                             {{ message }}
                         </div>
+
                     {% endfor %}
+
                 </div>
+
             {% endif %}
 
+
+
+            <!-- =========================================
+                 PACKAGE FILTERS
+            ========================================== -->
+
+            <div
+                class="management-table-wrapper mb-4"
+                style="padding: 1.25rem;"
+            >
+
+                <form
+                    method="get"
+                    action="{% url 'controlpanel:package_list' %}"
+                >
+
+                    <div class="row g-3">
+
+
+                        <!-- PACKAGE NAME -->
+
+                        <div class="col-12 col-lg-3">
+
+                            <label
+                                class="form-label"
+                                for="packageNameFilter"
+                            >
+                                Package name
+                            </label>
+
+
+                            <input
+                                id="packageNameFilter"
+                                class="form-control"
+                                type="text"
+                                name="name"
+                                value="{{ selected_name }}"
+                                placeholder="Example: Gold to Diamond"
+                            >
+
+                        </div>
+
+
+
+                        <!-- GAME -->
+
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label
+                                class="form-label"
+                                for="packageGameFilter"
+                            >
+                                Game
+                            </label>
+
+
+                            <select
+                                id="packageGameFilter"
+                                class="form-select"
+                                name="game"
+                            >
+
+                                <option value="">
+                                    All games
+                                </option>
+
+
+                                {% for game in games %}
+
+                                    <option
+                                        value="{{ game.id }}"
+                                        {% if selected_game == game.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ game.name }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label
+                                class="form-label"
+                                for="packageCategoryFilter"
+                            >
+                                Category
+                            </label>
+
+
+                            <select
+                                id="packageCategoryFilter"
+                                class="form-select"
+                                name="category"
+                            >
+
+                                <option value="">
+                                    All categories
+                                </option>
+
+
+                                {% for category in categories %}
+
+                                    <option
+                                        value="{{ category.id }}"
+                                        {% if selected_category == category.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ category.game.name }}
+                                        -
+                                        {{ category.name }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- STATUS -->
+
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label
+                                class="form-label"
+                                for="packageStatusFilter"
+                            >
+                                Status
+                            </label>
+
+
+                            <select
+                                id="packageStatusFilter"
+                                class="form-select"
+                                name="status"
+                            >
+
+                                <option
+                                    value=""
+                                    {% if not selected_status %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Active + Inactive
+                                </option>
+
+
+                                <option
+                                    value="active"
+                                    {% if selected_status == "active" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Active only
+                                </option>
+
+
+                                <option
+                                    value="inactive"
+                                    {% if selected_status == "inactive" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Inactive only
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FILTER BUTTONS -->
+
+                    <div
+                        class="d-flex flex-wrap
+                               align-items-center
+                               gap-2 mt-4"
+                    >
+
+                        <button
+                            class="btn btn-boost"
+                            type="submit"
+                        >
+                            Apply filters
+                        </button>
+
+
+                        <a
+                            class="btn btn-outline-light"
+                            href="{% url 'controlpanel:package_list' %}"
+                        >
+                            Clear filters
+                        </a>
+
+
+                        <span
+                            class="ms-md-auto"
+                        >
+                            <strong>
+                                {{ result_count }}
+                            </strong>
+
+                            package{{ result_count|pluralize }}
+                            found
+                        </span>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 PACKAGE TABLE
+            ========================================== -->
+
             <div class="management-table-wrapper">
+
                 <table class="management-table">
+
                     <thead>
+
                         <tr>
-                            <th>Image</th>
-                            <th>Package</th>
-                            <th>Game</th>
-                            <th>Rank route</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+
+                            <th>
+                                Image
+                            </th>
+
+                            <th>
+                                Package
+                            </th>
+
+                            <th>
+                                Game / Category
+                            </th>
+
+                            <th>
+                                Rank Progression
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Featured
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
                         </tr>
+
                     </thead>
 
+
                     <tbody>
+
                         {% for package in packages %}
+
                             <tr>
+
+
+                                <!-- IMAGE -->
+
                                 <td>
+
                                     {% if package.image %}
+
                                         <img
                                             class="management-thumbnail"
                                             src="{{ package.image.url }}"
                                             alt="{{ package.name }}"
+                                            loading="lazy"
                                         >
+
+                                    {% elif package.category.game.image %}
+
+                                        <img
+                                            class="management-thumbnail"
+                                            src="{{ package.category.game.image.url }}"
+                                            alt="{{ package.category.game.name }}"
+                                            loading="lazy"
+                                        >
+
                                     {% else %}
+
                                         <span class="no-image">
                                             No image
                                         </span>
+
                                     {% endif %}
+
                                 </td>
 
+
+
+                                <!-- PACKAGE -->
+
                                 <td>
-                                    <strong>{{ package.name }}</strong>
+
+                                    <strong>
+                                        {{ package.name }}
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- GAME / CATEGORY -->
+
+                                <td>
+
+                                    <strong>
+                                        {{ package.category.game.name }}
+                                    </strong>
+
 
                                     <p class="table-description">
+
                                         {{ package.category.name }}
+
                                     </p>
 
+                                </td>
+
+
+
+                                <!-- RANKS -->
+
+                                <td>
+
+                                    <div class="rank-route">
+
+                                        <span>
+                                            {{ package.current_rank.name }}
+                                        </span>
+
+                                        <strong>
+                                            →
+                                        </strong>
+
+                                        <span>
+                                            {{ package.target_rank.name }}
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- PRICE -->
+
+                                <td>
+
+                                    <strong>
+                                        €{{ package.price }}
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- COMPLETION TIME -->
+
+                                <td>
+
+                                    {{ package.estimated_days }}
+
+                                    day{{ package.estimated_days|pluralize }}
+
+                                </td>
+
+
+
+                                <!-- ACTIVE / INACTIVE -->
+
+                                <td>
+
+                                    {% if package.is_active %}
+
+                                        <span
+                                            class="status-badge
+                                                   status-active"
+                                        >
+                                            Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span
+                                            class="status-badge
+                                                   status-inactive"
+                                        >
+                                            Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- FEATURED -->
+
+                                <td>
+
                                     {% if package.is_featured %}
+
                                         <span class="featured-badge">
                                             Featured
                                         </span>
-                                    {% endif %}
-                                </td>
 
-                                <td>
-                                    {{ package.category.game.name }}
-                                </td>
-
-                                <td>
-                                    {{ package.current_rank.name }}
-                                    →
-
-                                    {{ package.target_rank.name }}
-                                </td>
-
-                                <td>
-                                    <strong>€{{ package.price }}</strong>
-
-                                    <p class="table-description">
-                                        {{ package.estimated_days }}
-                                        day{{ package.estimated_days|pluralize }}
-                                    </p>
-                                </td>
-
-                                <td>
-                                    {% if package.is_active %}
-                                        <span class="status-badge status-active">
-                                            Active
-                                        </span>
                                     {% else %}
-                                        <span class="status-badge status-inactive">
-                                            Inactive
+
+                                        <span>
+                                            —
                                         </span>
+
                                     {% endif %}
+
                                 </td>
 
+
+
+                                <!-- ACTIONS -->
+
                                 <td>
+
                                     <div class="table-actions">
+
                                         <a
-                                            class="btn btn-sm btn-outline-light"
+                                            class="btn
+                                                   btn-sm
+                                                   btn-outline-light"
                                             href="{% url 'controlpanel:package_update' package.id %}"
                                         >
                                             Edit
                                         </a>
 
+
                                         <a
-                                            class="btn btn-sm btn-outline-danger"
+                                            class="btn
+                                                   btn-sm
+                                                   btn-outline-danger"
                                             href="{% url 'controlpanel:package_delete_confirmation' package.id %}"
                                         >
                                             Delete
                                         </a>
+
                                     </div>
+
                                 </td>
+
                             </tr>
+
+
                         {% empty %}
+
                             <tr>
+
                                 <td
                                     class="empty-table"
-                                    colspan="7"
+                                    colspan="9"
                                 >
-                                    No boost packages have been created yet.
+
+                                    No packages match
+                                    the selected filters.
+
                                 </td>
+
                             </tr>
+
                         {% endfor %}
+
                     </tbody>
+
                 </table>
+
             </div>
+
+
+
+            <!-- =========================================
+                 BACK LINK
+            ========================================== -->
 
             <a
                 class="back-link"
@@ -154,6 +591,9 @@
             >
                 ← Back to Control Panel
             </a>
+
         </div>
+
     </section>
+
 {% endblock %}

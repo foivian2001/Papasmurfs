@@ -441,17 +441,93 @@ def rank_delete(request, rank_id):
 
 @staff_required
 def package_management_list(request):
-    """Display all boost packages in the custom control panel."""
+    """
+    Display boost packages for staff with management filters.
+    """
 
-    packages = BoostPackage.objects.select_related(
+    packages = (
+        BoostPackage.objects
+        .select_related(
+            "category",
+            "category__game",
+            "current_rank",
+            "target_rank",
+        )
+        .all()
+    )
+
+    games = Game.objects.order_by("name")
+
+    categories = (
+        ServiceCategory.objects
+        .select_related("game")
+        .order_by(
+            "game__name",
+            "name",
+        )
+    )
+
+    name_query = request.GET.get(
+        "name",
+        "",
+    ).strip()
+
+    game_id = request.GET.get(
+        "game",
+        "",
+    )
+
+    category_id = request.GET.get(
         "category",
-        "category__game",
-        "current_rank",
-        "target_rank",
+        "",
+    )
+
+    status = request.GET.get(
+        "status",
+        "",
+    )
+
+    if name_query:
+        packages = packages.filter(
+            name__icontains=name_query
+        )
+
+    if game_id:
+        packages = packages.filter(
+            category__game_id=game_id
+        )
+
+    if category_id:
+        packages = packages.filter(
+            category_id=category_id
+        )
+
+    if status == "active":
+        packages = packages.filter(
+            is_active=True
+        )
+
+    elif status == "inactive":
+        packages = packages.filter(
+            is_active=False
+        )
+
+    packages = packages.order_by(
+        "category__game__name",
+        "category__name",
+        "current_rank__rank_order",
+        "target_rank__rank_order",
     )
 
     context = {
         "packages": packages,
+        "games": games,
+        "categories": categories,
+        "selected_name": name_query,
+        "selected_game": game_id,
+        "selected_category": category_id,
+        "selected_status": status,
+        "result_count": packages.count(),
     }
 
     return render(
@@ -459,7 +535,6 @@ def package_management_list(request):
         "controlpanel/packages/package_list.html",
         context,
     )
-
 
 @staff_required
 def package_create(request):
