@@ -5,111 +5,541 @@
 {% endblock %}
 
 {% block content %}
-    <section class="order-section">
-        <div class="container">
-            <div class="order-page-heading">
-                <div>
-                    <p class="section-label">
-                        Simulated purchase
-                    </p>
 
-                    <h1>Confirm your order</h1>
+<style>
+    .payment-simulation-card {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.035);
+    }
 
-                    <p>
-                        Review the selected services before completing
-                        the simulated checkout.
-                    </p>
-                </div>
+    .payment-demo-notice {
+        margin-bottom: 1.5rem;
+        padding: 1rem 1.1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 210, 255, 0.25);
+        background: rgba(0, 210, 255, 0.07);
+    }
 
-                <a
-                    class="btn btn-outline-light"
-                    href="{% url 'cart:detail' %}"
-                >
-                    Back to cart
-                </a>
+    .payment-demo-notice strong {
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .payment-demo-notice p {
+        margin: 0.25rem 0;
+    }
+
+    .payment-demo-number {
+        font-family: monospace;
+        letter-spacing: 0.06rem;
+    }
+
+    .payment-error {
+        display: block;
+        margin-top: 0.4rem;
+        font-size: 0.88rem;
+        color: #ff8d8d;
+    }
+
+    .payment-security-note {
+        display: flex;
+        gap: 0.7rem;
+        align-items: flex-start;
+        margin-top: 1.2rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 0.9rem;
+        opacity: 0.75;
+    }
+
+    .payment-total-button {
+        font-size: 1.05rem;
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+    }
+</style>
+
+
+<section class="order-section">
+
+    <div class="container">
+
+
+        <!-- =============================================
+             PAGE HEADING
+        ============================================== -->
+
+        <div class="order-page-heading">
+
+            <div>
+
+                <p class="section-label">
+                    Simulated purchase
+                </p>
+
+                <h1>
+                    Complete your order
+                </h1>
+
+                <p>
+                    Review your selected services and complete
+                    the Papasmurfs simulated card transaction.
+                </p>
+
             </div>
 
+
+            <a
+                class="btn btn-outline-light"
+                href="{% url 'cart:detail' %}"
+            >
+                Back to cart
+            </a>
+
+        </div>
+
+
+        <!-- =============================================
+             PAYMENT FORM
+        ============================================== -->
+
+        <form
+            method="post"
+            action="{% url 'orders:place_order' %}"
+            autocomplete="off"
+        >
+
+            {% csrf_token %}
+
+
             <div class="row g-4">
+
+
+                <!-- =====================================
+                     LEFT SIDE
+                ====================================== -->
+
                 <div class="col-12 col-lg-8">
+
+
+                    <!-- ORDER ITEMS -->
+
                     <div class="order-items-card">
+
                         {% for item in cart_items %}
+
                             <article class="order-item-row">
+
                                 <div>
+
                                     <span class="game-badge">
+
                                         {{ item.package.category.game.name }}
+
                                     </span>
 
-                                    <h2>{{ item.package.name }}</h2>
+
+                                    <h2>
+                                        {{ item.package.name }}
+                                    </h2>
+
 
                                     <p>
+
                                         {{ item.package.current_rank.name }}
+
                                         →
+
                                         {{ item.package.target_rank.name }}
+
                                     </p>
 
+
                                     <p>
-                                        Quantity: {{ item.quantity }}
+                                        Quantity:
+                                        {{ item.quantity }}
                                     </p>
+
                                 </div>
+
 
                                 <div class="order-item-price">
+
                                     <span>
-                                        €{{ item.package.price }} each
+
+                                        €{{ item.package.price }}
+                                        each
+
                                     </span>
 
+
                                     <strong>
+
                                         €{{ item.subtotal }}
+
                                     </strong>
+
                                 </div>
+
                             </article>
+
                         {% endfor %}
+
                     </div>
+
+
+
+                    <!-- =================================
+                         SIMULATED PAYMENT
+                    ================================== -->
+
+                    <div class="payment-simulation-card">
+
+                        <p class="section-label">
+                            Payment simulation
+                        </p>
+
+                        <h2>
+                            Card details
+                        </h2>
+
+
+                        <div class="payment-demo-notice">
+
+                            <strong>
+                                Demo payment only
+                            </strong>
+
+                            <p>
+                                Do not enter a real credit or
+                                debit card.
+                            </p>
+
+                            <p>
+                                Approved demo card:
+                                <span class="payment-demo-number">
+                                    4242 4242 4242 4242
+                                </span>
+                            </p>
+
+                            <p>
+                                Declined demo card:
+                                <span class="payment-demo-number">
+                                    4000 0000 0000 0002
+                                </span>
+                            </p>
+
+                            <p>
+                                Use any future expiry date
+                                and a 3-digit demo CVV such
+                                as 123.
+                            </p>
+
+                        </div>
+
+
+
+                        <div class="row g-3">
+
+
+                            <!-- CARDHOLDER -->
+
+                            <div class="col-12">
+
+                                <label
+                                    class="form-label"
+                                    for="cardholderName"
+                                >
+                                    Cardholder name
+                                </label>
+
+
+                                <input
+                                    id="cardholderName"
+                                    class="form-control"
+                                    type="text"
+                                    name="cardholder_name"
+                                    value="{{ payment_values.cardholder_name }}"
+                                    placeholder="Demo Cardholder"
+                                    maxlength="100"
+                                    required
+                                >
+
+
+                                {% if payment_errors.cardholder_name %}
+
+                                    <span class="payment-error">
+
+                                        {{ payment_errors.cardholder_name }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- CARD NUMBER -->
+
+                            <div class="col-12">
+
+                                <label
+                                    class="form-label"
+                                    for="cardNumber"
+                                >
+                                    Card number
+                                </label>
+
+
+                                <input
+                                    id="cardNumber"
+                                    class="form-control"
+                                    type="text"
+                                    name="card_number"
+                                    inputmode="numeric"
+                                    placeholder="4242 4242 4242 4242"
+                                    maxlength="19"
+                                    required
+                                >
+
+
+                                {% if payment_errors.card_number %}
+
+                                    <span class="payment-error">
+
+                                        {{ payment_errors.card_number }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- EXPIRY -->
+
+                            <div class="col-12 col-md-6">
+
+                                <label
+                                    class="form-label"
+                                    for="cardExpiry"
+                                >
+                                    Expiry date
+                                </label>
+
+
+                                <input
+                                    id="cardExpiry"
+                                    class="form-control"
+                                    type="month"
+                                    name="expiry"
+                                    value="{{ payment_values.expiry }}"
+                                    required
+                                >
+
+
+                                {% if payment_errors.expiry %}
+
+                                    <span class="payment-error">
+
+                                        {{ payment_errors.expiry }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- CVV -->
+
+                            <div class="col-12 col-md-6">
+
+                                <label
+                                    class="form-label"
+                                    for="cardCvv"
+                                >
+                                    CVV
+                                </label>
+
+
+                                <input
+                                    id="cardCvv"
+                                    class="form-control"
+                                    type="password"
+                                    name="cvv"
+                                    inputmode="numeric"
+                                    placeholder="123"
+                                    minlength="3"
+                                    maxlength="3"
+                                    required
+                                >
+
+
+                                {% if payment_errors.cvv %}
+
+                                    <span class="payment-error">
+
+                                        {{ payment_errors.cvv }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- BILLING COUNTRY -->
+
+                            <div class="col-12">
+
+                                <label
+                                    class="form-label"
+                                    for="billingCountry"
+                                >
+                                    Billing country
+                                </label>
+
+
+                                <input
+                                    id="billingCountry"
+                                    class="form-control"
+                                    type="text"
+                                    name="billing_country"
+                                    value="{{ payment_values.billing_country }}"
+                                    placeholder="Greece"
+                                    maxlength="100"
+                                    required
+                                >
+
+
+                                {% if payment_errors.billing_country %}
+
+                                    <span class="payment-error">
+
+                                        {{ payment_errors.billing_country }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-security-note">
+
+                            <span>
+                                🔒
+                            </span>
+
+                            <span>
+                                This checkout only simulates a
+                                payment authorization. Card number,
+                                CVV and billing details are not stored
+                                by Papasmurfs and no financial
+                                transaction takes place.
+                            </span>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
+
+
+                <!-- =====================================
+                     ORDER SUMMARY
+                ====================================== -->
+
                 <div class="col-12 col-lg-4">
+
                     <aside class="order-summary-card">
+
                         <p class="section-label">
                             Order summary
                         </p>
 
-                        <h2>Final total</h2>
+
+                        <h2>
+                            Final total
+                        </h2>
+
 
                         <div class="summary-row">
-                            <span>Items</span>
-                            <strong>{{ cart.total_items }}</strong>
+
+                            <span>
+                                Items
+                            </span>
+
+                            <strong>
+                                {{ cart.total_items }}
+                            </strong>
+
                         </div>
 
+
                         <div class="summary-row">
-                            <span>Additional charges</span>
-                            <strong>€0.00</strong>
+
+                            <span>
+                                Additional charges
+                            </span>
+
+                            <strong>
+                                €0.00
+                            </strong>
+
                         </div>
+
 
                         <div class="summary-row cart-total-row">
-                            <span>Total</span>
-                            <strong>€{{ total_price }}</strong>
+
+                            <span>
+                                Total
+                            </span>
+
+                            <strong>
+                                €{{ total_price }}
+                            </strong>
+
                         </div>
 
-                        <form
-                            method="post"
-                            action="{% url 'orders:place_order' %}"
-                        >
-                            {% csrf_token %}
 
-                            <button
-                                class="btn btn-boost w-100"
-                                type="submit"
-                            >
-                                Complete simulated purchase
-                            </button>
-                        </form>
+                        <button
+                            class="btn btn-boost w-100 payment-total-button"
+                            type="submit"
+                        >
+                            Pay €{{ total_price }}
+                        </button>
+
 
                         <p class="cart-summary-note">
-                            This is a demonstration checkout. No real
-                            payment or financial transaction occurs.
+
+                            Demonstration checkout only.
+                            No real payment or financial
+                            transaction occurs.
+
                         </p>
+
                     </aside>
+
                 </div>
+
             </div>
-        </div>
-    </section>
+
+        </form>
+
+    </div>
+
+</section>
+
 {% endblock %}

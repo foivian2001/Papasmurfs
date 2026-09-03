@@ -1,3 +1,5 @@
+import secrets
+from datetime import date
 from decimal import Decimal
 
 from django.contrib import messages
@@ -7,13 +9,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from cart.models import Cart, CartItem
-
 from .models import Order, OrderItem
+
+
+DEMO_APPROVED_CARD = "4242424242424242"
+DEMO_DECLINED_CARD = "4000000000000002"
 
 
 @login_required(login_url="accounts:login")
 def checkout(request):
-    """Display the simulated checkout confirmation page."""
+    """Display the simulated checkout and payment page."""
 
     cart, created = Cart.objects.get_or_create(
         user=request.user,
@@ -47,6 +52,15 @@ def checkout(request):
         "cart": cart,
         "cart_items": cart_items,
         "total_price": total_price,
+        "payment_errors": {},
+        "payment_values": {
+            "cardholder_name": (
+                request.user.get_full_name()
+                or request.user.username
+            ),
+            "expiry": "",
+            "billing_country": "Greece",
+        },
     }
 
     return render(
@@ -60,7 +74,13 @@ def checkout(request):
 @require_POST
 @transaction.atomic
 def place_order(request):
-    """Convert the user's cart into a completed simulated order."""
+    """
+    Validate a simulated card payment and convert the user's
+    cart into a completed order.
+
+    Payment information is used only for this request and is
+    never saved to the database.
+    """
 
     cart = get_object_or_404(
         Cart.objects.select_for_update(),
@@ -115,6 +135,189 @@ def place_order(request):
         Decimal("0.00"),
     )
 
+    # --------------------------------------------------------
+    # SIMULATED PAYMENT DATA
+    # --------------------------------------------------------
+
+    cardholder_name = request.POST.get(
+        "cardholder_name",
+        "",
+    ).strip()
+
+    raw_card_number = request.POST.get(
+        "card_number",
+        "",
+    ).strip()
+
+    expiry = request.POST.get(
+        "expiry",
+        "",
+    ).strip()
+
+    cvv = request.POST.get(
+        "cvv",
+        "",
+    ).strip()
+
+    billing_country = request.POST.get(
+        "billing_country",
+        "",
+    ).strip()
+
+    # Remove only normal formatting characters.
+    card_number = (
+        raw_card_number
+        .replace(" ", "")
+        .replace("-", "")
+    )
+
+    payment_errors = {}
+
+    # --------------------------------------------------------
+    # CARDHOLDER
+    # --------------------------------------------------------
+
+    if len(cardholder_name) < 2:
+        payment_errors["cardholder_name"] = (
+            "Enter the cardholder name."
+        )
+
+    # --------------------------------------------------------
+    # DEMO CARD NUMBER
+    # --------------------------------------------------------
+
+    if card_number not in {
+        DEMO_APPROVED_CARD,
+        DEMO_DECLINED_CARD,
+    }:
+        payment_errors["card_number"] = (
+            "Use one of the Papasmurfs demo card numbers."
+        )
+
+    # --------------------------------------------------------
+    # EXPIRY DATE
+    # --------------------------------------------------------
+
+    if not expiry:
+        payment_errors["expiry"] = (
+            "Select an expiry date."
+        )
+
+    else:
+        try:
+            year_text, month_text = expiry.split("-")
+
+            expiry_year = int(year_text)
+            expiry_month = int(month_text)
+
+            today = date.today()
+
+            if not 1 <= expiry_month <= 12:
+                raise ValueError
+
+            if (
+                expiry_year,
+                expiry_month,
+            ) < (
+                today.year,
+                today.month,
+            ):
+                payment_errors["expiry"] = (
+                    "The simulated card has expired."
+                )
+
+        except (ValueError, TypeError):
+            payment_errors["expiry"] = (
+                "Enter a valid expiry date."
+            )
+
+    # --------------------------------------------------------
+    # CVV
+    # --------------------------------------------------------
+
+    if (
+        not cvv.isdigit()
+        or len(cvv) != 3
+    ):
+        payment_errors["cvv"] = (
+            "Enter a 3-digit demo CVV."
+        )
+
+    # --------------------------------------------------------
+    # BILLING COUNTRY
+    # --------------------------------------------------------
+
+    if len(billing_country) < 2:
+        payment_errors["billing_country"] = (
+            "Enter a billing country."
+        )
+
+    # --------------------------------------------------------
+    # RETURN VALIDATION ERRORS
+    # --------------------------------------------------------
+
+    if payment_errors:
+        context = {
+            "cart": cart,
+            "cart_items": cart_items,
+            "total_price": total_price,
+            "payment_errors": payment_errors,
+            "payment_values": {
+                "cardholder_name": cardholder_name,
+                "expiry": expiry,
+                "billing_country": billing_country,
+            },
+        }
+
+        return render(
+            request,
+            "orders/checkout.html",
+            context,
+            status=400,
+        )
+
+    # --------------------------------------------------------
+    # SIMULATED DECLINED TRANSACTION
+    # --------------------------------------------------------
+
+    if card_number == DEMO_DECLINED_CARD:
+        context = {
+            "cart": cart,
+            "cart_items": cart_items,
+            "total_price": total_price,
+            "payment_errors": {
+                "card_number": (
+                    "Transaction declined by the simulated bank. "
+                    "Try the approved demo card."
+                ),
+            },
+            "payment_values": {
+                "cardholder_name": cardholder_name,
+                "expiry": expiry,
+                "billing_country": billing_country,
+            },
+        }
+
+        return render(
+            request,
+            "orders/checkout.html",
+            context,
+            status=400,
+        )
+
+    # --------------------------------------------------------
+    # SIMULATED PAYMENT APPROVED
+    # --------------------------------------------------------
+
+    transaction_reference = (
+        "PS-"
+        + secrets.token_hex(4).upper()
+    )
+
+    # --------------------------------------------------------
+    # CREATE ORDER
+    # --------------------------------------------------------
+
     order = Order.objects.create(
         user=request.user,
         status=Order.Status.COMPLETED,
@@ -140,7 +343,9 @@ def place_order(request):
             )
         )
 
-    OrderItem.objects.bulk_create(order_items)
+    OrderItem.objects.bulk_create(
+        order_items
+    )
 
     CartItem.objects.filter(
         cart=cart,
@@ -148,7 +353,13 @@ def place_order(request):
 
     messages.success(
         request,
-        f"Order #{order.id} was completed successfully.",
+        (
+            f"Simulated payment approved. "
+            f"Transaction {transaction_reference}. "
+            f"Demo card ending in {card_number[-4:]}. "
+            f"Order #{order.id} was completed successfully. "
+            f"No real payment was processed."
+        ),
     )
 
     return redirect(
