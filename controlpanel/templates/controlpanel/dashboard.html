@@ -26,8 +26,9 @@
                     <h1>Papasmurfs Control Panel</h1>
 
                     <p>
-                        Manage catalogue content, registered users and
-                        business activity from one protected area.
+                        Manage catalogue content, registered users,
+                        customer orders and business activity from one
+                        protected area.
                     </p>
                 </div>
 
@@ -69,6 +70,13 @@
                     <article class="stat-card">
                         <p>Users</p>
                         <strong>{{ user_count }}</strong>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl">
+                    <article class="stat-card">
+                        <p>Orders</p>
+                        <strong>{{ order_count }}</strong>
                     </article>
                 </div>
             </div>
@@ -144,6 +152,22 @@
                         href="{% url 'usermanagement:list' %}"
                     >
                         Manage users
+                    </a>
+                </article>
+
+                <article class="management-card">
+                    <h2>Orders</h2>
+
+                    <p>
+                        Review customer purchases, inspect ordered
+                        services and manage order status.
+                    </p>
+
+                    <a
+                        class="btn btn-boost"
+                        href="{% url 'controlpanel:order_list' %}"
+                    >
+                        Manage orders
                     </a>
                 </article>
             </div>

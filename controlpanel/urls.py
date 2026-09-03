@@ -5,9 +5,22 @@ from . import views
 app_name = "controlpanel"
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
-    path("games/", views.game_list, name="game_list"),
-    path("games/add/", views.game_create, name="game_create"),
+    path(
+        "",
+        views.dashboard,
+        name="dashboard",
+    ),
+
+    path(
+        "games/",
+        views.game_list,
+        name="game_list",
+    ),
+    path(
+        "games/add/",
+        views.game_create,
+        name="game_create",
+    ),
     path(
         "games/<int:game_id>/edit/",
         views.game_update,
@@ -29,7 +42,7 @@ urlpatterns = [
         views.category_list,
         name="category_list",
     ),
-        path(
+    path(
         "categories/add/",
         views.category_create,
         name="category_create",
@@ -39,18 +52,18 @@ urlpatterns = [
         views.category_update,
         name="category_update",
     ),
-        path(
+    path(
         "categories/<int:category_id>/delete/",
         views.category_delete_confirmation,
         name="category_delete_confirmation",
     ),
-        path(
+    path(
         "categories/<int:category_id>/delete/confirm/",
         views.category_delete,
         name="category_delete",
     ),
 
-        path(
+    path(
         "ranks/",
         views.rank_list,
         name="rank_list",
@@ -76,7 +89,7 @@ urlpatterns = [
         name="rank_delete",
     ),
 
-        path(
+    path(
         "packages/",
         views.package_management_list,
         name="package_list",
@@ -100,5 +113,21 @@ urlpatterns = [
         "packages/<int:package_id>/delete/confirm/",
         views.package_delete,
         name="package_delete",
+    ),
+
+    path(
+        "orders/",
+        views.order_list,
+        name="order_list",
+    ),
+    path(
+        "orders/<int:order_id>/",
+        views.order_detail,
+        name="order_detail",
+    ),
+    path(
+        "orders/<int:order_id>/status/",
+        views.order_status_update,
+        name="order_status_update",
     ),
 ]

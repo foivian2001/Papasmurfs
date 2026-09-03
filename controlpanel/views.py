@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Q
 from django.db.models.deletion import ProtectedError
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from catalogue.models import (
@@ -10,6 +11,7 @@ from catalogue.models import (
     Rank,
     ServiceCategory,
 )
+from orders.models import Order
 
 from .decorators import staff_required
 from .forms import (
@@ -32,6 +34,7 @@ def dashboard(request):
         "rank_count": Rank.objects.count(),
         "package_count": BoostPackage.objects.count(),
         "user_count": user_model.objects.count(),
+        "order_count": Order.objects.count(),
     }
 
     return render(
@@ -169,6 +172,7 @@ def game_delete(request, game_id):
 
     return redirect("controlpanel:game_list")
 
+
 @staff_required
 def category_list(request):
     """Display all service categories."""
@@ -294,6 +298,7 @@ def category_delete(request, category_id):
     )
 
     return redirect("controlpanel:category_list")
+
 
 @staff_required
 def rank_list(request):
@@ -439,6 +444,7 @@ def rank_delete(request, rank_id):
 
     return redirect("controlpanel:rank_list")
 
+
 @staff_required
 def package_management_list(request):
     """
@@ -535,6 +541,7 @@ def package_management_list(request):
         "controlpanel/packages/package_list.html",
         context,
     )
+
 
 @staff_required
 def package_create(request):
@@ -651,3 +658,141 @@ def package_delete(request, package_id):
     )
 
     return redirect("controlpanel:package_list")
+
+
+@staff_required
+def order_list(request):
+    """Display and filter customer orders for staff members."""
+
+    orders = (
+        Order.objects
+        .select_related("user")
+        .prefetch_related("items")
+        .all()
+    )
+
+    query = request.GET.get(
+        "query",
+        "",
+    ).strip()
+
+    status = request.GET.get(
+        "status",
+        "",
+    ).strip()
+
+    if query:
+        clean_query = query.lstrip("#")
+
+        search_filter = (
+            Q(user__username__icontains=query)
+            | Q(user__email__icontains=query)
+        )
+
+        if clean_query.isdigit():
+            search_filter |= Q(id=int(clean_query))
+
+        orders = orders.filter(search_filter)
+
+    if status in Order.Status.values:
+        orders = orders.filter(
+            status=status,
+        )
+
+    orders = orders.order_by("-created_at")
+
+    context = {
+        "orders": orders,
+        "query": query,
+        "selected_status": status,
+        "status_choices": Order.Status.choices,
+        "result_count": orders.count(),
+    }
+
+    return render(
+        request,
+        "controlpanel/orders/order_list.html",
+        context,
+    )
+
+
+@staff_required
+def order_detail(request, order_id):
+    """Display a customer's order details to staff members."""
+
+    order = get_object_or_404(
+        Order.objects
+        .select_related("user")
+        .prefetch_related("items"),
+        id=order_id,
+    )
+
+    context = {
+        "order": order,
+        "status_choices": Order.Status.choices,
+    }
+
+    return render(
+        request,
+        "controlpanel/orders/order_detail.html",
+        context,
+    )
+
+
+@staff_required
+@require_POST
+def order_status_update(request, order_id):
+    """Allow staff to update an order's status safely."""
+
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+    )
+
+    new_status = request.POST.get(
+        "status",
+        "",
+    )
+
+    if new_status not in Order.Status.values:
+        messages.error(
+            request,
+            "The selected order status is invalid.",
+        )
+
+        return redirect(
+            "controlpanel:order_detail",
+            order_id=order.id,
+        )
+
+    if order.status == new_status:
+        messages.info(
+            request,
+            "The order already has that status.",
+        )
+
+        return redirect(
+            "controlpanel:order_detail",
+            order_id=order.id,
+        )
+
+    order.status = new_status
+    order.save(
+        update_fields=[
+            "status",
+            "updated_at",
+        ]
+    )
+
+    messages.success(
+        request,
+        (
+            f"Order #{order.id} status was changed to "
+            f"{order.get_status_display()}."
+        ),
+    )
+
+    return redirect(
+        "controlpanel:order_detail",
+        order_id=order.id,
+    )

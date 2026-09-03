@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Manage Orders | Papasmurfs
+{% endblock %}
+
+{% block content %}
+    <section class="control-panel-section">
+        <div class="container">
+            <div class="control-panel-heading">
+                <div>
+                    <p class="section-label">
+                        Staff administration
+                    </p>
+
+                    <h1>Order Management</h1>
+
+                    <p>
+                        Search customer purchases, review their status
+                        and inspect the services included in each order.
+                    </p>
+                </div>
+
+                <a
+                    class="btn btn-outline-light"
+                    href="{% url 'controlpanel:dashboard' %}"
+                >
+                    Back to Control Panel
+                </a>
+            </div>
+
+            <form
+                method="get"
+                action="{% url 'controlpanel:order_list' %}"
+                class="management-card mb-4"
+            >
+                <div class="row g-3 align-items-end">
+                    <div class="col-12 col-lg-6">
+                        <label
+                            for="order-search"
+                            class="form-label"
+                        >
+                            Search
+                        </label>
+
+                        <input
+                            type="text"
+                            id="order-search"
+                            name="query"
+                            value="{{ query }}"
+                            class="form-control"
+                            placeholder="Order ID, username or email"
+                        >
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label
+                            for="order-status"
+                            class="form-label"
+                        >
+                            Status
+                        </label>
+
+                        <select
+                            id="order-status"
+                            name="status"
+                            class="form-select"
+                        >
+                            <option value="">
+                                All statuses
+                            </option>
+
+                            {% for value, label in status_choices %}
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_status == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="d-flex gap-2">
+                            <button
+                                type="submit"
+                                class="btn btn-boost flex-grow-1"
+                            >
+                                Filter
+                            </button>
+
+                            <a
+                                href="{% url 'controlpanel:order_list' %}"
+                                class="btn btn-outline-light"
+                            >
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">
+                    Orders
+                </h2>
+
+                <span class="staff-badge">
+                    {{ result_count }} result{{ result_count|pluralize }}
+                </span>
+            </div>
+
+            {% if orders %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            #{{ order.id }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {{ order.user.username }}
+
+                                        {% if order.user.email %}
+                                            <div class="small text-secondary">
+                                                {{ order.user.email }}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {{ order.created_at|date:"d M Y, H:i" }}
+                                    </td>
+
+                                    <td>
+                                        {{ order.total_items }}
+                                    </td>
+
+                                    <td>
+                                        €{{ order.total_price }}
+                                    </td>
+
+                                    <td>
+                                        {% if order.status == "completed" %}
+                                            <span class="badge text-bg-success">
+                                                {{ order.get_status_display }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge text-bg-danger">
+                                                {{ order.get_status_display }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="text-end">
+                                        <a
+                                            class="btn btn-sm btn-boost"
+                                            href="{% url 'controlpanel:order_detail' order.id %}"
+                                        >
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <article class="management-card">
+                    <h2>No orders found</h2>
+
+                    <p class="mb-0">
+                        No customer orders match the selected filters.
+                    </p>
+                </article>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
