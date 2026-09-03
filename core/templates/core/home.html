@@ -1,32 +1,1161 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Home | Papasmurfs
 {% endblock %}
 
 {% block content %}
-    <section class="hero-section d-flex align-items-center">
+
+<style>
+    /* =========================================================
+       HOMEPAGE ONLY
+       These styles are scoped to .home-page so they do not
+       interfere with the rest of the project.
+    ========================================================= */
+
+    .home-page {
+        overflow: hidden;
+    }
+
+    .home-page .home-section {
+        padding: 5.5rem 0;
+    }
+
+    .home-page .home-section-dark {
+        background:
+            radial-gradient(
+                circle at top right,
+                rgba(123, 44, 191, 0.16),
+                transparent 35%
+            ),
+            rgba(5, 10, 20, 0.82);
+    }
+
+    .home-page .home-section-soft {
+        background: rgba(255, 255, 255, 0.025);
+    }
+
+    .home-page .home-heading {
+        max-width: 760px;
+        margin-bottom: 2.5rem;
+    }
+
+    .home-page .home-heading h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        margin-bottom: 1rem;
+    }
+
+    .home-page .home-heading p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        opacity: 0.82;
+    }
+
+
+    /* HERO */
+
+    .home-page .home-hero {
+        min-height: 78vh;
+        position: relative;
+        background:
+            linear-gradient(
+                rgba(4, 8, 18, 0.60),
+                rgba(4, 8, 18, 0.93)
+            ),
+            radial-gradient(
+                circle at 50% 25%,
+                rgba(0, 210, 255, 0.18),
+                transparent 42%
+            );
+    }
+
+    .home-page .home-hero-content {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .home-page .home-hero h1 {
+        font-size: clamp(3rem, 7vw, 5.8rem);
+        line-height: 1;
+        margin-bottom: 1.5rem;
+    }
+
+    .home-page .home-hero .hero-text {
+        max-width: 720px;
+        margin: 0 auto 2rem;
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .home-page .hero-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .home-page .hero-points {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 2rem;
+    }
+
+    .home-page .hero-point {
+        padding: 0.55rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.9rem;
+    }
+
+
+    /* GAME CARDS */
+
+    .home-page .game-showcase-card {
+        display: block;
+        height: 100%;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.035);
+        text-decoration: none;
+        color: inherit;
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .home-page .game-showcase-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(0, 210, 255, 0.5);
+        color: inherit;
+    }
+
+    .home-page .game-showcase-image {
+        height: 190px;
+        padding: 1.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.24);
+    }
+
+    .home-page .game-showcase-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .home-page .game-showcase-body {
+        padding: 1.4rem;
+    }
+
+    .home-page .game-showcase-body h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.55rem;
+    }
+
+    .home-page .game-showcase-body p {
+        margin: 0;
+        opacity: 0.72;
+        line-height: 1.6;
+    }
+
+
+    /* ABOUT / SERVICES */
+
+    .home-page .business-intro {
+        max-width: 920px;
+        font-size: 1.1rem;
+        line-height: 1.9;
+        opacity: 0.88;
+    }
+
+    .home-page .service-feature {
+        height: 100%;
+        padding: 1.6rem;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.035);
+    }
+
+    .home-page .service-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 42px;
+        height: 42px;
+        padding: 0 0.7rem;
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        background: rgba(0, 210, 255, 0.12);
+        font-weight: 700;
+    }
+
+    .home-page .service-feature h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .home-page .service-feature p {
+        margin: 0;
+        line-height: 1.7;
+        opacity: 0.78;
+    }
+
+    .home-page .team-panel {
+        margin-top: 3rem;
+        padding: 2rem;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 210, 255, 0.18);
+        background:
+            linear-gradient(
+                135deg,
+                rgba(0, 210, 255, 0.07),
+                rgba(123, 44, 191, 0.07)
+            );
+    }
+
+    .home-page .team-panel p {
+        line-height: 1.8;
+        opacity: 0.84;
+    }
+
+    .home-page .service-list {
+        margin: 0;
+        padding-left: 1.1rem;
+    }
+
+    .home-page .service-list li {
+        margin-bottom: 0.65rem;
+        line-height: 1.6;
+    }
+
+
+    /* PROCESS */
+
+    .home-page .process-row {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .home-page .process-step {
+        position: relative;
+        height: 100%;
+        padding: 1.3rem 0;
+    }
+
+    .home-page .process-step strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.05rem;
+    }
+
+    .home-page .process-step p {
+        margin: 0;
+        opacity: 0.7;
+        line-height: 1.6;
+    }
+
+
+    /* BOOSTER RECRUITMENT */
+
+    .home-page .booster-section {
+        padding: 5.5rem 0;
+        position: relative;
+        background:
+            radial-gradient(
+                circle at left,
+                rgba(123, 44, 191, 0.22),
+                transparent 42%
+            ),
+            radial-gradient(
+                circle at right,
+                rgba(0, 210, 255, 0.12),
+                transparent 35%
+            );
+    }
+
+    .home-page .booster-panel {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 3rem;
+        text-align: center;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.035);
+    }
+
+    .home-page .booster-panel h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        margin-bottom: 1rem;
+    }
+
+    .home-page .booster-panel p {
+        max-width: 720px;
+        margin: 0 auto 2rem;
+        line-height: 1.8;
+        opacity: 0.82;
+    }
+
+
+    /* FINAL CTA */
+
+    .home-page .final-home-cta {
+        padding: 5rem 0;
+        text-align: center;
+    }
+
+    .home-page .final-home-cta h2 {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        margin-bottom: 1rem;
+    }
+
+    .home-page .final-home-cta p {
+        max-width: 650px;
+        margin: 0 auto 2rem;
+        line-height: 1.8;
+        opacity: 0.8;
+    }
+
+
+    /* HOME FOOTER */
+
+    .home-page .home-footer {
+        padding: 3.5rem 0 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(0, 0, 0, 0.28);
+    }
+
+    .home-page .home-footer h3,
+    .home-page .home-footer h4 {
+        margin-bottom: 1rem;
+    }
+
+    .home-page .home-footer p {
+        line-height: 1.7;
+        opacity: 0.72;
+    }
+
+    .home-page .home-footer a {
+        display: inline-block;
+        margin-bottom: 0.55rem;
+        color: inherit;
+        opacity: 0.78;
+        text-decoration: none;
+    }
+
+    .home-page .home-footer a:hover {
+        opacity: 1;
+    }
+
+    .home-page .footer-bottom {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        opacity: 0.6;
+        font-size: 0.9rem;
+    }
+
+
+    @media (max-width: 767px) {
+        .home-page .home-section,
+        .home-page .booster-section {
+            padding: 4rem 0;
+        }
+
+        .home-page .home-hero {
+            min-height: 72vh;
+        }
+
+        .home-page .booster-panel {
+            padding: 2rem 1.3rem;
+        }
+
+        .home-page .game-showcase-image {
+            height: 160px;
+        }
+    }
+</style>
+
+
+<div class="home-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero-section home-hero d-flex align-items-center">
+
         <div class="container text-center">
-            <p class="hero-label">
-                Competitive gaming without the grind
-            </p>
 
-            <h1>
-                Reach the rank you deserve.
-            </h1>
+            <div class="home-hero-content">
 
-            <p class="hero-text">
-                Choose your game, select your current rank,
-                and tell us where you want to finish.
-                Our experienced boosters handle the climb.
-            </p>
+                <p class="hero-label">
+                    Competitive gaming without the grind
+                </p>
 
-            <a
-                class="btn btn-boost btn-lg"
-                href="{% url 'catalogue:package_list' %}"
-            >
-                Get Boosted Now
-            </a>
+
+                <h1>
+                    Reach the rank you deserve.
+                </h1>
+
+
+                <p class="hero-text">
+                    Choose your game, select your current rank or level
+                    and decide where you want to finish.
+                    Papasmurfs helps players find the progression
+                    service that fits their goals.
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a
+                        class="btn btn-boost btn-lg"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+                        Get Boosted Now
+                    </a>
+
+
+                    <a
+                        class="btn btn-outline-light btn-lg"
+                        href="{% url 'search:package_search' %}"
+                    >
+                        Advanced Search
+                    </a>
+
+                </div>
+
+
+                <div class="hero-points">
+
+                    <span class="hero-point">
+                        Multiple competitive games
+                    </span>
+
+                    <span class="hero-point">
+                        Rank & level progression
+                    </span>
+
+                    <span class="hero-point">
+                        Reviews & recommendations
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
+
     </section>
+
+
+
+    <!-- =====================================================
+         GAMES
+    ====================================================== -->
+
+    <section class="home-section home-section-soft">
+
+        <div class="container">
+
+            <div class="home-heading">
+
+                <p class="section-label">
+                    Our games
+                </p>
+
+                <h2>
+                    Choose where you want to climb.
+                </h2>
+
+                <p>
+                    Papasmurfs currently provides progression services
+                    across four different gaming experiences,
+                    from competitive ranked ladders to character
+                    and account progression.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- LEAGUE OF LEGENDS -->
+
+                <div class="col-12 col-sm-6 col-xl-3">
+
+                    <a
+                        class="game-showcase-card"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+
+                        <div class="game-showcase-image">
+
+                            <img
+                                src="{% static 'images/games/league-of-legends.png' %}"
+                                alt="League of Legends"
+                            >
+
+                        </div>
+
+
+                        <div class="game-showcase-body">
+
+                            <h3>
+                                League of Legends
+                            </h3>
+
+                            <p>
+                                Solo/Duo ranked progression from
+                                the lower divisions through the
+                                highest competitive tiers.
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- COUNTER-STRIKE 2 -->
+
+                <div class="col-12 col-sm-6 col-xl-3">
+
+                    <a
+                        class="game-showcase-card"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+
+                        <div class="game-showcase-image">
+
+                            <img
+                                src="{% static 'images/games/counter-strike-2.png' %}"
+                                alt="Counter-Strike 2"
+                            >
+
+                        </div>
+
+
+                        <div class="game-showcase-body">
+
+                            <h3>
+                                Counter-Strike 2
+                            </h3>
+
+                            <p>
+                                Competitive rank progression
+                                across the CS2 ranking system.
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- FORTNITE -->
+
+                <div class="col-12 col-sm-6 col-xl-3">
+
+                    <a
+                        class="game-showcase-card"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+
+                        <div class="game-showcase-image">
+
+                            <img
+                                src="{% static 'images/games/fortnite.png' %}"
+                                alt="Fortnite"
+                            >
+
+                        </div>
+
+
+                        <div class="game-showcase-body">
+
+                            <h3>
+                                Fortnite
+                            </h3>
+
+                            <p>
+                                Competitive progression for both
+                                traditional Build Mode and
+                                Zero Build players.
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- GTA ONLINE -->
+
+                <div class="col-12 col-sm-6 col-xl-3">
+
+                    <a
+                        class="game-showcase-card"
+                        href="{% url 'catalogue:package_list' %}"
+                    >
+
+                        <div class="game-showcase-image">
+
+                            <img
+                                src="{% static 'images/games/gta-online.png' %}"
+                                alt="GTA Online"
+                            >
+
+                        </div>
+
+
+                        <div class="game-showcase-body">
+
+                            <h3>
+                                GTA Online
+                            </h3>
+
+                            <p>
+                                RP and character-level progression
+                                designed around GTA Online's
+                                long-term account development.
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="text-center mt-5">
+
+                <a
+                    class="btn btn-boost"
+                    href="{% url 'catalogue:package_list' %}"
+                >
+                    Explore All Services
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         WHAT WE DO / SERVICES / TEAM
+    ====================================================== -->
+
+    <section class="home-section home-section-dark">
+
+        <div class="container">
+
+            <div class="home-heading">
+
+                <p class="section-label">
+                    What we do
+                </p>
+
+                <h2>
+                    One platform for competitive progression.
+                </h2>
+
+            </div>
+
+
+            <p class="business-intro">
+
+                Papasmurfs is a Greece-based gaming service focused
+                on competitive progression and account development.
+                Instead of forcing customers through a single generic
+                service, our catalogue is built around each game's
+                own ranking or progression system.
+
+                League of Legends players can select Solo/Duo
+                progression, CS2 players can move through competitive
+                ranks, Fortnite customers can choose between Build and
+                Zero Build progression, while GTA Online players can
+                focus on RP and character levels.
+
+            </p>
+
+
+            <div class="row g-4 mt-3">
+
+
+                <!-- SERVICE 1 -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <article class="service-feature">
+
+                        <span class="service-number">
+                            01
+                        </span>
+
+                        <h3>
+                            Find the right service
+                        </h3>
+
+                        <p>
+                            Browse by game and category or use
+                            advanced search when you already know
+                            exactly what progression you need.
+                        </p>
+
+                    </article>
+
+                </div>
+
+
+
+                <!-- SERVICE 2 -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <article class="service-feature">
+
+                        <span class="service-number">
+                            02
+                        </span>
+
+                        <h3>
+                            Choose your progression
+                        </h3>
+
+                        <p>
+                            Select your current position and desired
+                            destination, then compare price and
+                            estimated completion time.
+                        </p>
+
+                    </article>
+
+                </div>
+
+
+
+                <!-- SERVICE 3 -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <article class="service-feature">
+
+                        <span class="service-number">
+                            03
+                        </span>
+
+                        <h3>
+                            Manage everything in one account
+                        </h3>
+
+                        <p>
+                            Customer accounts keep orders,
+                            profile information and previous
+                            activity together in one dashboard.
+                        </p>
+
+                    </article>
+
+                </div>
+
+
+
+                <!-- SERVICE 4 -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+
+                    <article class="service-feature">
+
+                        <span class="service-number">
+                            04
+                        </span>
+
+                        <h3>
+                            Discover better matches
+                        </h3>
+
+                        <p>
+                            Reviews and personalized recommendations
+                            help customers discover services that
+                            better match their gaming interests.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TEAM / SPECIALITY -->
+
+            <div class="team-panel">
+
+                <div class="row g-4 align-items-center">
+
+                    <div class="col-12 col-lg-7">
+
+                        <p class="section-label">
+                            Our speciality
+                        </p>
+
+                        <h2>
+                            Built around the games we understand.
+                        </h2>
+
+                        <p>
+                            Papasmurfs concentrates on a focused
+                            selection of competitive games rather
+                            than trying to cover every title available.
+                            Each service is structured around the
+                            progression system of its game, allowing
+                            the catalogue to provide meaningful rank
+                            routes, pricing and estimated completion
+                            times.
+                        </p>
+
+                        <p>
+                            Our team operates from Greece while the
+                            service itself is entirely online, making
+                            the platform accessible to players
+                            regardless of where they play from.
+                        </p>
+
+                    </div>
+
+
+                    <div class="col-12 col-lg-5">
+
+                        <h3>
+                            Current specialties
+                        </h3>
+
+                        <ul class="service-list">
+
+                            <li>
+                                League of Legends Solo/Duo ranking
+                            </li>
+
+                            <li>
+                                Counter-Strike 2 competitive ranking
+                            </li>
+
+                            <li>
+                                Fortnite Build & Zero Build ranking
+                            </li>
+
+                            <li>
+                                GTA Online RP & level progression
+                            </li>
+
+                            <li>
+                                Personalized service recommendations
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PROCESS -->
+
+                <div class="row g-4 process-row">
+
+                    <div class="col-12 col-md-6 col-xl-3">
+
+                        <div class="process-step">
+
+                            <strong>
+                                1. Find
+                            </strong>
+
+                            <p>
+                                Browse or search the catalogue.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-md-6 col-xl-3">
+
+                        <div class="process-step">
+
+                            <strong>
+                                2. Choose
+                            </strong>
+
+                            <p>
+                                Select the progression that fits.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-md-6 col-xl-3">
+
+                        <div class="process-step">
+
+                            <strong>
+                                3. Order
+                            </strong>
+
+                            <p>
+                                Add the package and complete checkout.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-md-6 col-xl-3">
+
+                        <div class="process-step">
+
+                            <strong>
+                                4. Track
+                            </strong>
+
+                            <p>
+                                Keep your orders together in your account.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         BOOSTER / STAFF WEBSITE
+    ====================================================== -->
+
+    <section class="booster-section">
+
+        <div class="container">
+
+            <div class="booster-panel">
+
+                <p class="section-label">
+                    Join the other side
+                </p>
+
+                <h2>
+                    Want to become a booster yourself?
+                </h2>
+
+                <p>
+                    Papasmurfs is not only for players looking to climb.
+                    If you are an experienced competitive player and
+                    believe you have the skills to help other players
+                    reach their goals, visit our dedicated staff website.
+
+                    There you can learn more about the booster role,
+                    our team and what it takes to apply.
+                </p>
+
+
+                <a
+                    class="btn btn-boost btn-lg"
+                    href="https://foivian2001.github.io/Papasmurfs-Midterm/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Visit Staff Website
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FINAL CTA
+    ====================================================== -->
+
+    <section class="final-home-cta home-section-dark">
+
+        <div class="container">
+
+            <p class="section-label">
+                Your next rank starts here
+            </p>
+
+            <h2>
+                Ready to start your climb?
+            </h2>
+
+            <p>
+                Explore the complete Papasmurfs catalogue or use
+                Advanced Search to find a service based on your
+                game, rank, budget and preferred completion time.
+            </p>
+
+
+            <div class="hero-actions">
+
+                <a
+                    class="btn btn-boost btn-lg"
+                    href="{% url 'catalogue:package_list' %}"
+                >
+                    Browse Services
+                </a>
+
+
+                <a
+                    class="btn btn-outline-light btn-lg"
+                    href="{% url 'search:package_search' %}"
+                >
+                    Search Packages
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         HOMEPAGE FOOTER
+    ====================================================== -->
+
+    <footer class="home-footer">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+
+                <div class="col-12 col-lg-5">
+
+                    <h3>
+                        Papasmurfs
+                    </h3>
+
+                    <p>
+                        Competitive gaming progression services
+                        across League of Legends, Counter-Strike 2,
+                        Fortnite and GTA Online.
+                    </p>
+
+                </div>
+
+
+                <div class="col-6 col-lg-2">
+
+                    <h4>
+                        Explore
+                    </h4>
+
+                    <a href="{% url 'catalogue:package_list' %}">
+                        Services
+                    </a>
+
+                    <br>
+
+                    <a href="{% url 'search:package_search' %}">
+                        Advanced Search
+                    </a>
+
+                </div>
+
+
+                <div class="col-6 col-lg-2">
+
+                    <h4>
+                        Games
+                    </h4>
+
+                    <p>
+                        League of Legends<br>
+                        Counter-Strike 2<br>
+                        Fortnite<br>
+                        GTA Online
+                    </p>
+
+                </div>
+
+
+                <div class="col-12 col-lg-3">
+
+                    <h4>
+                        Work with us
+                    </h4>
+
+                    <p>
+                        Experienced competitive player?
+                    </p>
+
+                    <a
+                        href="https://foivian2001.github.io/Papasmurfs-Midterm/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Visit Booster Staff Website →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                © 2026 Papasmurfs.
+                Competitive gaming progression platform.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</div>
+
 {% endblock %}
