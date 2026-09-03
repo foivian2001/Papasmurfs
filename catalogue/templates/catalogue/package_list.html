@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load catalogue_images %}
 
 
 {% block title %}
@@ -85,7 +86,7 @@
 
                                         <img
                                             class="package-card-image"
-                                            src="{{ game.image.url }}"
+                                            src="{% catalogue_image_url game %}"
                                             alt="{{ game.name }}"
                                         >
 
@@ -184,7 +185,7 @@
 
                                         <img
                                             class="package-card-image"
-                                            src="{{ package.image.url }}"
+                                            src="{% catalogue_image_url package %}"
                                             alt="{{ package.name }}"
                                         >
 
@@ -192,7 +193,7 @@
 
                                         <img
                                             class="package-card-image"
-                                            src="{{ package.category.game.image.url }}"
+                                            src="{% catalogue_image_url package.category.game %}"
                                             alt="{{ package.category.game.name }}"
                                         >
 
@@ -744,7 +745,7 @@
 
                                         <img
                                             class="package-card-image"
-                                            src="{{ package.image.url }}"
+                                            src="{% catalogue_image_url package %}"
                                             alt="{{ package.name }}"
                                         >
 
@@ -752,7 +753,7 @@
 
                                         <img
                                             class="package-card-image"
-                                            src="{{ package.category.game.image.url }}"
+                                            src="{% catalogue_image_url package.category.game %}"
                                             alt="{{ package.category.game.name }}"
                                         >
 

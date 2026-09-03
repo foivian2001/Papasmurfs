@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load catalogue_images %}
 
 {% block title %}
     Shopping Cart | Papasmurfs
@@ -49,7 +50,7 @@
                                         {% if item.package.image %}
                                             <img
                                                 class="cart-item-image"
-                                                src="{{ item.package.image.url }}"
+                                                src="{% catalogue_image_url item.package %}"
                                                 alt="{{ item.package.name }}"
                                             >
                                         {% else %}

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load catalogue_images %}
 
 
 {% block title %}
@@ -368,7 +369,7 @@
 
                                         <img
                                             class="management-thumbnail"
-                                            src="{{ package.image.url }}"
+                                            src="{% catalogue_image_url package %}"
                                             alt="{{ package.name }}"
                                             loading="lazy"
                                         >
@@ -377,7 +378,7 @@
 
                                         <img
                                             class="management-thumbnail"
-                                            src="{{ package.category.game.image.url }}"
+                                            src="{% catalogue_image_url package.category.game %}"
                                             alt="{{ package.category.game.name }}"
                                             loading="lazy"
                                         >
