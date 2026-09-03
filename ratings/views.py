@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
 from catalogue.models import BoostPackage
+from orders.models import Order, OrderItem
 
 from .forms import PackageReviewForm
 from .models import PackageReview
@@ -13,7 +14,12 @@ from .models import PackageReview
 @login_required(login_url="accounts:login")
 @require_POST
 def submit_review(request, package_id):
-    """Create or update a package review through AJAX."""
+    """
+    Create or update a package review through AJAX.
+
+    Only users who completed an order containing this
+    package are allowed to submit a review.
+    """
 
     package = get_object_or_404(
         BoostPackage.objects.select_related(
@@ -24,6 +30,32 @@ def submit_review(request, package_id):
         is_active=True,
         category__game__is_active=True,
     )
+
+    # --------------------------------------------------------
+    # VERIFIED CUSTOMER CHECK
+    # --------------------------------------------------------
+
+    has_completed_purchase = OrderItem.objects.filter(
+        order__user=request.user,
+        order__status=Order.Status.COMPLETED,
+        package=package,
+    ).exists()
+
+    if not has_completed_purchase:
+        return JsonResponse(
+            {
+                "success": False,
+                "message": (
+                    "You can review this service only after "
+                    "completing an order that contains it."
+                ),
+            },
+            status=403,
+        )
+
+    # --------------------------------------------------------
+    # REVIEW FORM
+    # --------------------------------------------------------
 
     form = PackageReviewForm(request.POST)
 
@@ -55,12 +87,19 @@ def submit_review(request, package_id):
         review_count=Count("id"),
     )
 
-    average_rating = statistics["average_rating"] or 0
+    average_rating = (
+        statistics["average_rating"]
+        or 0
+    )
 
     if created:
-        message = "Your review was submitted successfully."
+        message = (
+            "Your review was submitted successfully."
+        )
     else:
-        message = "Your review was updated successfully."
+        message = (
+            "Your review was updated successfully."
+        )
 
     return JsonResponse(
         {

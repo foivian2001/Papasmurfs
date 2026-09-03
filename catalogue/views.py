@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from django.db.models import Avg, Count
 from django.shortcuts import get_object_or_404, render
 
+from orders.models import Order, OrderItem
+
 from .models import (
     BoostPackage,
     Game,
@@ -239,8 +241,8 @@ def package_list(request):
     # PAGINATION
     # --------------------------------------------------------
 
-    # We deliberately do not dump hundreds of packages
-    # onto the screen until a customer selects a game.
+    # Do not display hundreds of packages until
+    # the customer selects a game.
     show_catalogue = selected_game is not None
 
     page_obj = None
@@ -293,6 +295,9 @@ def package_list(request):
 def package_detail(request, package_id):
     """
     Display one active package and its customer reviews.
+
+    A logged-in customer can leave a review only if they
+    have completed an order containing this package.
     """
 
     package = get_object_or_404(
@@ -307,9 +312,11 @@ def package_detail(request, package_id):
         category__game__is_active=True,
     )
 
-    reviews = package.reviews.select_related(
-        "user",
-    ).all()
+    reviews = (
+        package.reviews
+        .select_related("user")
+        .all()
+    )
 
     statistics = reviews.aggregate(
         average_rating=Avg("rating"),
@@ -326,6 +333,7 @@ def package_detail(request, package_id):
     ]
 
     user_review = None
+    can_review = False
 
     if request.user.is_authenticated:
 
@@ -333,12 +341,23 @@ def package_detail(request, package_id):
             user=request.user,
         ).first()
 
+        # ----------------------------------------------------
+        # VERIFIED PURCHASE CHECK
+        # ----------------------------------------------------
+
+        can_review = OrderItem.objects.filter(
+            order__user=request.user,
+            order__status=Order.Status.COMPLETED,
+            package=package,
+        ).exists()
+
     context = {
         "package": package,
         "reviews": reviews,
         "average_rating": average_rating,
         "review_count": review_count,
         "user_review": user_review,
+        "can_review": can_review,
     }
 
     return render(

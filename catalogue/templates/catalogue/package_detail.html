@@ -8,6 +8,7 @@
 {% block content %}
     <section class="package-detail-section">
         <div class="container">
+
             {% if messages %}
                 <div class="message-container">
                     {% for message in messages %}
@@ -26,6 +27,7 @@
             </a>
 
             <article class="package-detail-grid">
+
                 <div>
                     {% if package.category.game.name == "League of Legends" %}
                         <img
@@ -77,7 +79,9 @@
                 </div>
 
                 <div class="package-detail-content">
+
                     <div class="package-card-top">
+
                         <span class="game-badge">
                             {{ package.category.game.name }}
                         </span>
@@ -87,11 +91,15 @@
                                 Featured
                             </span>
                         {% endif %}
+
                     </div>
 
-                    <h1>{{ package.name }}</h1>
+                    <h1>
+                        {{ package.name }}
+                    </h1>
 
                     <div class="package-rating-summary">
+
                         <span class="rating-stars">
                             ★★★★★
                         </span>
@@ -111,6 +119,7 @@
                             review{{ review_count|pluralize }}
                             )
                         </span>
+
                     </div>
 
                     <p class="package-detail-description">
@@ -118,28 +127,40 @@
                     </p>
 
                     <div class="rank-route">
+
                         <span>
                             {{ package.current_rank.name }}
                         </span>
 
-                        <strong>→</strong>
+                        <strong>
+                            →
+                        </strong>
 
                         <span>
                             {{ package.target_rank.name }}
                         </span>
+
                     </div>
 
                     <div class="package-detail-meta">
+
                         <p>
-                            <strong>Service category:</strong>
+                            <strong>
+                                Service category:
+                            </strong>
+
                             {{ package.category.name }}
                         </p>
 
                         <p>
-                            <strong>Estimated completion:</strong>
+                            <strong>
+                                Estimated completion:
+                            </strong>
+
                             {{ package.estimated_days }}
                             day{{ package.estimated_days|pluralize }}
                         </p>
+
                     </div>
 
                     <p class="package-detail-price">
@@ -147,6 +168,7 @@
                     </p>
 
                     {% if user.is_authenticated %}
+
                         <form
                             class="add-to-cart-form"
                             method="post"
@@ -155,6 +177,7 @@
                             {% csrf_token %}
 
                             <div class="quantity-control">
+
                                 <label
                                     class="form-label"
                                     for="package-quantity"
@@ -171,6 +194,7 @@
                                     min="1"
                                     max="10"
                                 >
+
                             </div>
 
                             <button
@@ -179,35 +203,66 @@
                             >
                                 Add to cart
                             </button>
+
                         </form>
+
                     {% else %}
+
                         <a
                             class="btn btn-boost"
                             href="{% url 'accounts:login' %}"
                         >
                             Log in to add to cart
                         </a>
+
                     {% endif %}
+
                 </div>
+
             </article>
 
-            <section class="reviews-section">
+
+            <!-- =================================================
+                 RATINGS AND REVIEWS
+            ================================================== -->
+
+            <section
+                class="reviews-section"
+                id="reviews"
+            >
+
                 <div class="reviews-heading">
+
                     <div>
+
                         <p class="section-label">
                             Customer feedback
                         </p>
 
-                        <h2>Ratings and reviews</h2>
+                        <h2>
+                            Ratings and reviews
+                        </h2>
+
                     </div>
+
                 </div>
 
+
                 <div class="row g-4">
+
                     <div class="col-12 col-lg-5">
-                        {% if user.is_authenticated %}
+
+
+                        <!-- =====================================
+                             COMPLETED CUSTOMER
+                        ====================================== -->
+
+                        {% if user.is_authenticated and can_review %}
+
                             <div class="review-form-card">
+
                                 <p class="section-label">
-                                    Your review
+                                    Verified customer review
                                 </p>
 
                                 <h2>
@@ -217,6 +272,11 @@
                                         Rate this package
                                     {% endif %}
                                 </h2>
+
+                                <p>
+                                    Your completed order makes you
+                                    eligible to review this service.
+                                </p>
 
                                 <form
                                     id="review-form"
@@ -240,6 +300,7 @@
                                         class="star-selector"
                                         id="star-selector"
                                     >
+
                                         <button
                                             class="star-button {% if user_review and user_review.rating >= 1 %}selected{% endif %}"
                                             type="button"
@@ -284,9 +345,12 @@
                                         >
                                             ★
                                         </button>
+
                                     </div>
 
+
                                     <div class="mt-4">
+
                                         <label
                                             class="form-label"
                                             for="review-text"
@@ -302,7 +366,9 @@
                                             maxlength="1000"
                                             placeholder="Share your experience with this package..."
                                         >{% if user_review %}{{ user_review.review_text }}{% endif %}</textarea>
+
                                     </div>
+
 
                                     <button
                                         class="btn btn-boost mt-4"
@@ -320,15 +386,85 @@
                                         id="review-message"
                                         aria-live="polite"
                                     ></p>
+
                                 </form>
+
                             </div>
-                        {% else %}
+
+
+                        <!-- =====================================
+                             LOGGED IN BUT NOT PURCHASED
+                        ====================================== -->
+
+                        {% elif user.is_authenticated %}
+
                             <div class="review-form-card">
-                                <h2>Want to leave a review?</h2>
+
+                                <p class="section-label">
+                                    Verified reviews
+                                </p>
+
+                                <h2>
+                                    Purchase required
+                                </h2>
 
                                 <p>
-                                    Log in to rate this package and share
-                                    your experience.
+                                    Reviews are available only to
+                                    customers who have completed an
+                                    order containing this service.
+                                </p>
+
+                                <p>
+                                    Add this package to your cart and
+                                    complete the simulated payment.
+                                    You can then return here to leave
+                                    your rating and review.
+                                </p>
+
+                                <form
+                                    method="post"
+                                    action="{% url 'cart:add' package.id %}"
+                                >
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="quantity"
+                                        value="1"
+                                    >
+
+                                    <button
+                                        class="btn btn-boost"
+                                        type="submit"
+                                    >
+                                        Add to cart
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+
+                        <!-- =====================================
+                             NOT LOGGED IN
+                        ====================================== -->
+
+                        {% else %}
+
+                            <div class="review-form-card">
+
+                                <p class="section-label">
+                                    Verified reviews
+                                </p>
+
+                                <h2>
+                                    Want to leave a review?
+                                </h2>
+
+                                <p>
+                                    Log in and complete an order
+                                    containing this package before
+                                    submitting a review.
                                 </p>
 
                                 <a
@@ -337,22 +473,36 @@
                                 >
                                     Log in
                                 </a>
+
                             </div>
+
                         {% endif %}
+
                     </div>
 
+
+                    <!-- =========================================
+                         EXISTING CUSTOMER REVIEWS
+                    ========================================== -->
+
                     <div class="col-12 col-lg-7">
+
                         <div
                             class="review-list"
                             id="review-list"
                         >
+
                             {% for review in reviews %}
+
                                 <article
                                     class="review-card"
                                     data-review-user-id="{{ review.user.id }}"
                                 >
+
                                     <div class="review-card-heading">
+
                                         <div>
+
                                             <strong class="review-author">
                                                 {{ review.user.username }}
                                             </strong>
@@ -360,43 +510,75 @@
                                             <p class="review-date">
                                                 {{ review.updated_at|date:"d F Y, H:i" }}
                                             </p>
+
                                         </div>
 
+
                                         <span class="review-stars">
+
                                             {% if review.rating == 1 %}
                                                 ★☆☆☆☆
+
                                             {% elif review.rating == 2 %}
                                                 ★★☆☆☆
+
                                             {% elif review.rating == 3 %}
                                                 ★★★☆☆
+
                                             {% elif review.rating == 4 %}
                                                 ★★★★☆
+
                                             {% else %}
                                                 ★★★★★
                                             {% endif %}
+
                                         </span>
+
                                     </div>
 
+
                                     <p class="review-body">
+
                                         {% if review.review_text %}
+
                                             {{ review.review_text }}
+
                                         {% else %}
+
                                             No written review was provided.
+
                                         {% endif %}
+
                                     </p>
+
                                 </article>
+
+
                             {% empty %}
+
                                 <p id="no-reviews-message">
-                                    No reviews yet. Be the first member
-                                    to rate this package.
+
+                                    No verified customer reviews yet.
+
                                 </p>
+
                             {% endfor %}
+
                         </div>
+
                     </div>
+
                 </div>
+
             </section>
+
         </div>
+
     </section>
 
-    <script src="{% static 'js/ratings.js' %}"></script>
+
+    {% if user.is_authenticated and can_review %}
+        <script src="{% static 'js/ratings.js' %}"></script>
+    {% endif %}
+
 {% endblock %}
